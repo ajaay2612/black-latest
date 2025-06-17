@@ -4,6 +4,7 @@
     import { TextureLoader } from 'three'
     import { useLoader } from '@threlte/core'
     import Water from '$lib/mesh/Water.svelte'
+    import Crystal from '$lib/mesh/Crystal.svelte'
     import {
         useGltf,
         useDraco,
@@ -109,6 +110,30 @@
 
 <!-- ground -->
 <Water/>
+
+<Crystal/>
+<!-- ice steps -->
+<!-- <T.Mesh position={[ 0.055, 0.3253, 0.3107 ]} scale={[ 1.552, 0.0849, 0.5697 ]}>
+    <T.BoxGeometry/>
+    <T.MeshPhysicalMaterial
+        color="#e8e9ff"
+        metalness={0}
+        roughness={0.15}
+        transmission={0.85}
+        thickness={0.8}
+        ior={1.31}
+        clearcoat={0.9}
+        clearcoatRoughness={0.1}
+        opacity={0.95}
+        transparent={true}
+        reflectivity={0.5}
+        sheen={0.3}
+        sheenColor="#ffffff"
+        emissive="#ccd2ff"
+        emissiveIntensity={0.08}
+    />
+</T.Mesh> -->
+
 
 <T.PerspectiveCamera
     makeDefault
