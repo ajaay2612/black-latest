@@ -33,14 +33,14 @@
         flowDirection: new THREE.Vector2( params.flowX, params.flowY ),
         textureWidth: 1024,
         textureHeight: 1024,
-        reflectivity:0.5,
+        reflectivity:0.6,
     }
 
     useTask(()=>{ })
 
 </script>
 
-<T.Water 
+<!-- <T.Water 
     args={[
         new THREE.PlaneGeometry(3, 3),
         waterParams
@@ -48,9 +48,9 @@
     position={[-0.0237, -0.75, 0]}
     rotation.x={deg2rad(-90)}
     scale={[3.5, 3.3, 2.5]}
-/>
+/> -->
 <!-- dummy -->
-<T.Mesh
+<!-- <T.Mesh
     position={[ 0, -0.7733, -0.0024 ]}
     rotation.x={deg2rad(-90)}
     scale={[3.5, 3.3, 2.5]}
@@ -69,5 +69,5 @@
     sheen={0} 
     sheenRoughness={0.0652} 
     clearcoatRoughness={0}/>
-</T.Mesh>
+</T.Mesh> -->
 
