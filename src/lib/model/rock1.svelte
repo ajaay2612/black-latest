@@ -42,8 +42,8 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
         backside: true,
         samples: 8,
         resolution: 512,
-        roughness: 0,
-        thickness: 0.1,
+        roughness: 0.1,
+        thickness: 0.3,
         // ior: 1,
         chromaticAberration: 0.3,
         anisotropy: 1,
@@ -52,9 +52,9 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
         temporalDistortion: 0.3,
         clearcoat: 1,
         attenuationDistance: 0.5,
-        attenuationColor: "#ffffff",
-        background: "#bababa",
-        color: "#f7e1f7",
+        attenuationColor: "#fff",
+        background: "#dcd3f5",
+        color: "#fff",
     };
 </script>
 
@@ -72,8 +72,6 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
     /> -->
 
         <T.Mesh
-            
-            
             geometry={gltf.nodes.tripo_node_f589d329.geometry}
         >
             <MeshTransmissionMaterial {...meshTransmissionConfig} />
@@ -87,11 +85,21 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
             
                 geometry={gltfWire.nodes.tripo_node_f589d329001.geometry}
             
+                position={[ 0.0134, 0.014, -0.014 ]}
+            
+                scale={[ 0.76, 0.75, 0.59 ]}
+            
+                receiveShadow
+            
+                castShadow
+            
             >
                 <T.MeshStandardMaterial
-                    color="#000"
-                    emissive="#dfb5ff"
-                    emissiveIntensity={10}
+                    color="#75428b"
+                    emissive="#6c4d84"
+                    emissiveIntensity={41}
+                    visible
+                    transparent
                 />
             </T.Mesh>
 
