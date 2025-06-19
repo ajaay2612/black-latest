@@ -44,10 +44,10 @@
                 camera,
                 new BloomEffect({
                     intensity: 1,
-                    luminanceThreshold: 0.15,
+                    luminanceThreshold: 0,
                     height: 512,
                     width: 512,
-                    luminanceSmoothing: 0.08,
+                    luminanceSmoothing: 1.5,
                     mipmapBlur: true,
                     kernelSize: KernelSize.MEDIUM
                 })
@@ -97,13 +97,12 @@
 <T.DirectionalLight position={[ -4.5286, 14.5201, -22.9639 ]} color="#ffffff" intensity={0.02} target.position={[ 1.28, -0.2, 5.2 ]} visible/>
 
 <!-- portal -->
-<T.Mesh position={[ 0, -0.0043, -0.6 ]} scale={[ 1, 1, 1 ]} visible={false}>
+<T.Mesh position={[ 0, -0.0043, -0.6 ]} scale={[ 1, 1, 1 ]} visible>
     <T.PlaneGeometry args={[1,1.5]} />
     <T.MeshStandardMaterial
         color="#ffffff"               
         emissive="#ffffff"            
-        emissiveIntensity={0.39}
-        envMapIntensity={-0.4}
+        emissiveIntensity={0.3}
         roughness={0.5}
         metalness={0}        
     />

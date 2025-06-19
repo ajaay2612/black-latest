@@ -4,85 +4,110 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
 -->
 
 <script>
-  import { T } from '@threlte/core'
-  import { useGltf } from '@threlte/extras'
-  import MeshTransmissionMaterial from '$lib/materials/MeshTransmissionMaterial.svelte'
-  import { RectAreaLight } from 'three';
+    import { T } from "@threlte/core";
+    import * as THREE from 'three';
+    import { useGltf, useDraco } from "@threlte/extras";
+    import MeshTransmissionMaterial from "$lib/materials/MeshTransmissionMaterial.svelte";
+    import { RectAreaLight } from "three";
+    import { Edges } from '@threlte/extras'
 
-  let { fallback, error, children, ref = $bindable(), ...props } = $props()
+    let { fallback, error, children, ref = $bindable(), ...props } = $props();
+    const dracoLoader = useDraco();
+    const gltf = useGltf("/model/rocks2.glb", { dracoLoader });
+    const gltfWire = useGltf("/model/rocks2wire.glb", { dracoLoader });
 
-  const gltf = useGltf('/model/rock1.glb')
+    gltfWire.then((gltfWire) => {
+        console.log("gltf", gltfWire);
+    });
 
-  // const material = Object.assign(new MeshTransmissionMaterial(), {
-  //   backside: true,
-  //   samples:8,
-  //   resolution:512,
-  //   // clearcoat: 1,
-  //   // clearcoatRoughness: 5,
-  //   transmission: 1,
-  //   chromaticAberration: 0.2,
-  //   anisotrophicBlur: 1,
-  //   // Set to > 0 for diffuse roughness
-  //   roughness: 0.2,
-  //   thickness: 0.3,
-  //   // ior: 1.2,
-  //   // Set to > 0 for animation
-  //   // distortion: 0.2,
-  //   // distortionScale: 0.2,
-  //   // temporalDistortion: 0.4,
-  // });
-
-     const meshTransmissionConfig = {
+    // const meshTransmissionConfig = {
+    //     backside: true,
+    //     samples: 8,
+    //     resolution: 512,
+    //     roughness: 0.2,
+    //     thickness: 0.35,
+    //     // ior: 1,
+    //     chromaticAberration: 0.3,
+    //     anisotropy: 1,
+    //     distortion: 0.5,
+    //     distortionScale: 0.3,
+    //     temporalDistortion: 0.3,
+    //     clearcoat: 1,
+    //     attenuationDistance: 0.5,
+    //     attenuationColor: "#ffffff",
+    //     background: "#aa33ff",
+    //     color: "#470d57",
+    // };
+    const meshTransmissionConfig = {
         backside: true,
         samples: 8,
         resolution: 512,
-        roughness: 0.2,
-        thickness: 0.3,
+        roughness: 0,
+        thickness: 0.1,
         // ior: 1,
-        chromaticAberration: 0.2,
+        chromaticAberration: 0.3,
         anisotropy: 1,
-        distortion: 0.0,
+        distortion: 0.2,
         distortionScale: 0.3,
-        temporalDistortion: 0.5,
+        temporalDistortion: 0.3,
         clearcoat: 1,
         attenuationDistance: 0.5,
         attenuationColor: "#ffffff",
-        color: "#fff",
-        background: "#fff"
+        background: "#bababa",
+        color: "#f7e1f7",
     };
-
 </script>
 
-<T.Group
-  bind:ref
-  dispose={false}
-  {...props}
-  position={[ 0.131, 0, 0 ]}
->
-  {#await gltf}
-    {@render fallback?.()}
-  {:then gltf}
-    <!-- <T.Mesh
+<T.Group bind:ref dispose={false} {...props} 
+    position={[ 1.0921, -0.6837, 0.657 ]}
+    scale={[0.8, 0.8, 0.8]}
+    >
+    {#await gltf}
+        {@render fallback?.()}
+    {:then gltf}
+        <!-- <T.Mesh
       geometry={gltf.nodes.Cylinder001.geometry}
       material={material}
-      position={[ 1.0281, -0.6665, 0.4857 ]}
-      scale={[ 0.1,0.1,0.1 ]}
-      rotation={[ 0, 0, -0.3967 ]}
+
     /> -->
 
-    <T.Mesh geometry={gltf.nodes.Cylinder001.geometry}>
-        <MeshTransmissionMaterial {...meshTransmissionConfig}/>
-    </T.Mesh>
+        <T.Mesh
+            
+            
+            geometry={gltf.nodes.tripo_node_f589d329.geometry}
+        >
+            <MeshTransmissionMaterial {...meshTransmissionConfig} />
+         
+        </T.Mesh>
 
-    <!-- <T.Mesh 
+        {#await gltfWire}
+            {@render fallback?.()}
+        {:then gltfWire}
+            <T.Mesh
+            
+                geometry={gltfWire.nodes.tripo_node_f589d329001.geometry}
+            
+            >
+                <T.MeshStandardMaterial
+                    color="#000"
+                    emissive="#dfb5ff"
+                    emissiveIntensity={10}
+                />
+            </T.Mesh>
+
+        {/await}
+
+
+        
+        <!-- <T.Mesh 
     scale={[ 0.005,0.005,0.005 ]}
     position={[ 1.0516, -0.591, 0.4739 ]}>
       <T.SphereGeometry args={[2,5,5]}/>
       <T.MeshStandardMaterial emissive="#f88f8f" emissiveIntensity={2} envMapIntensity={0} roughness={1} metalness={0.8587} color="#fdb1b1"/>
     </T.Mesh> -->
-  {:catch err}
-    {@render error?.({ error: err })}
-  {/await}
+    {:catch err}
+        {@render error?.({ error: err })}
+    {/await}
 
-  {@render children?.({ ref })}
+    {@render children?.({ ref })}
 </T.Group>

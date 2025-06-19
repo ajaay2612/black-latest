@@ -10,10 +10,9 @@
 
 <div class="h-screen fixed left-0 top-0 w-full bg-[#000000]">
     <Canvas>
-        <Environment
-        isBackground={!false}
-        
-        url="/hdr/city.hdr" />
+        <!-- <Environment
+        isBackground={false}        
+        url="/hdr/city.hdr" /> -->
         <Studio>
             <!-- <Sky elevation={0}/> -->
             <Scene />

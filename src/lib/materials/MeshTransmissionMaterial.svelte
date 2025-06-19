@@ -110,4 +110,7 @@
     transmission={transmissionSampler ? transmission : 0}
     {thickness}
     side={2}
+    emissive="#ececec"
+    emissiveIntensity={0}
+    reflectivity={1}
   />
