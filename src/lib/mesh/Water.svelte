@@ -35,8 +35,8 @@
     const params = {
         color: "#fff",
         scale: 5,
-        flowX: 0.8,
-        flowY: 0.5,
+        flowX: 0.5,
+        flowY: 0.2,
     };
 
     // Water parameters
@@ -46,7 +46,7 @@
         flowDirection: new THREE.Vector2(params.flowX, params.flowY),
         textureWidth: 1024,
         textureHeight: 1024,
-        reflectivity: 0.6,
+        reflectivity: 0.3,
     };
 
     useTask(() => {});
@@ -65,7 +65,7 @@
     {@render fallback?.()}
 {:then groundGltf}
     <T.Mesh
-        position={[ 0, -0.7682, -0.0024 ]}
+        position={[ 0, -0.8258, -0.0024 ]}
         rotation.y={deg2rad(10)}
         scale={[2.5, 2.5, 2.5]}
 
@@ -85,9 +85,9 @@
         clipIntersection={false}
         clipShadows={false}
         reflectivity={0.6196}
-        ior={0}
+        ior={0.3261}
         sheen={0}
-        sheenRoughness={0.0652}
+        sheenRoughness={0}
         clearcoatRoughness={0}
     />
     </T.Mesh>
