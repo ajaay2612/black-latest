@@ -97,7 +97,7 @@
 <T.DirectionalLight position={[ -4.5286, 14.5201, -22.9639 ]} color="#ffffff" intensity={0.02} target.position={[ 1.28, -0.2, 5.2 ]} visible/>
 
 <!-- portal -->
-<T.Mesh position={[ 0, -0.0043, -0.6 ]} scale={[ 1, 1, 1 ]} visible>
+<T.Mesh position={[ -0.3589, -0.0043, -1.3002 ]} scale={[ 1, 1, 1 ]} visible>
     <T.PlaneGeometry args={[1,1.5]} />
     <T.MeshStandardMaterial
         color="#ffffff"               
