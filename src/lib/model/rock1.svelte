@@ -53,14 +53,14 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
         clearcoat: 1,
         attenuationDistance: 0.5,
         attenuationColor: "#fff",
-        background: "#dcd3f5",
-        color: "#fff",
+        background: "#955cdb",
+        color: "#ead9ff",
     };
 </script>
 
 <T.Group bind:ref dispose={false} {...props} 
-    position={[ -0.4651, -0.642, 0.3977 ]}
-    scale={[ 0.2, 0.2, 0.2 ]}
+    
+    scale={[ 0.2, 0.2, 0.2 ]} 
     >
     {#await gltf}
         {@render fallback?.()}
@@ -73,6 +73,7 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
 
         <T.Mesh
             geometry={gltf.nodes.tripo_node_f589d329.geometry}
+            position={[ 0, 0, 0 ]}
         
         >
             <MeshTransmissionMaterial {...meshTransmissionConfig} />
@@ -96,11 +97,8 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
             
             >
                 <T.MeshStandardMaterial
-                    color="#75428b"
-                    emissive="#6c4d84"
-                    emissiveIntensity={41}
+                    color="#ffffff"
                     visible
-                    transparent
                 />
             </T.Mesh>
 

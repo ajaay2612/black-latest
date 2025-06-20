@@ -12,7 +12,7 @@
     <Canvas>
         <!-- <Environment
         isBackground={false}        
-        url="/hdr/city.hdr" /> -->
+        url="/hdr/sky.jpg" /> -->
         <Studio>
             <!-- <Sky elevation={0}/> -->
             <Scene />

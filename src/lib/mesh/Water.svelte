@@ -59,7 +59,7 @@
 
 <T.Water
     args={[new THREE.PlaneGeometry(3, 3), waterParams]}
-    position={[0.0226, -0.75, 0]}
+    position={[0.0226, -0.76, 0]}
     rotation.x={deg2rad(-90)}
     scale={[3.5, 3.3, 2.5]}
 />
@@ -107,31 +107,34 @@
         position={[ -0.4378, -0.6696, -0.0024 ]}
         rotation.y={deg2rad(10)}
         scale={[1.2, 1.2, 1.2]}
-
         geometry={terrainGltf.nodes.Plane001.geometry}
-        receiveShadow
-        castShadow
         rotation={[ 0, 3.1416, 0 ]}
     >
     <T.MeshPhysicalMaterial
         map={$floorTexture}
         normalMap={$floorNormalTexture}
         color="#000000"
-        opacity={1}
-        transparent={false}
-        roughness={0.1087}
-        metalness={0}
-        clipIntersection={false}
-        clipShadows={false}
-        reflectivity={0}
-        ior={0.0652}
-        sheen={0}
-        sheenRoughness={0}
-        clearcoatRoughness={0}
-        emissive="#000000"
+        roughness={0.8696}
+  
     />
     </T.Mesh>
 {/await}
+
+    <!-- draft 1 -->
+  <!-- <T.MeshPhysicalMaterial
+        map={$floorTexture}
+        normalMap={$floorNormalTexture}
+        color="#000000"
+        reflectivity={0}
+        roughness={1}
+        metalness={0}
+        ior={0}
+        emissive="#000000"
+        clearcoat={0}
+        clearcoatRoughness={0}
+        transmission={0}
+  
+    /> -->
 
 <!-- <T.Mesh
     position={[0, -0.7733, -0.0024]}

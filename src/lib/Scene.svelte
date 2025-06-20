@@ -44,10 +44,8 @@
                 camera,
                 new BloomEffect({
                     intensity: 1,
+                    radius: 0.75,
                     luminanceThreshold: 0,
-                    height: 512,
-                    width: 512,
-                    luminanceSmoothing: 1.5,
                     mipmapBlur: true,
                     kernelSize: KernelSize.MEDIUM
                 })
@@ -92,17 +90,17 @@
 
 
 
-<T.AmbientLight intensity={2} visible />
+<!-- <T.AmbientLight intensity={2} visible /> -->
 <!-- <T.PointLight color="#f6a8a8" intensity={0.8096} scale={[ 1, 1, 1 ]} position={[ -0.486, -0.211, 1.0607 ]} distance={-2.3} power={9.2549} decay={8.1}/> -->
-<T.DirectionalLight position={[ -4.5286, 14.5201, -22.9639 ]} color="#ffffff" intensity={0.02} target.position={[ 1.28, -0.2, 5.2 ]} visible/>
+<T.DirectionalLight position={[ -2.6311, 6.7201, -38.7693 ]} color="#ffffff" intensity={0.16} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
 
 <!-- portal -->
 <T.Mesh position={[ -0.3248, -0.4189, 0.034 ]} scale={[ 0.263, 0.3218, 1 ]} visible>
     <T.PlaneGeometry args={[1,1.5]} />
     <T.MeshStandardMaterial
-        color="#ffffff"               
+        color="#000000"               
         emissive="#ffffff"            
-        emissiveIntensity={0.3}
+        emissiveIntensity={0.8}
         roughness={0.5}
         metalness={0}        
     />
@@ -113,15 +111,20 @@
 
 <!-- <Crystal/> -->
 
-<Rock1/>
+<Rock1 position={[ 0.1508, -0.3843, 0.2003 ]}/>
+<Rock1 position={[-0.85,-0.57,0]}/>
 
 
 <T.PerspectiveCamera
     makeDefault
-    position={[ 2.2481, 0.0135, 2.9331 ]}
+    position={[ -0.2241, -0.4104, 1.6949 ]}
     matrixAutoUpdate
-    fov={50}
-    rotation={[ 0, 0.4902, 0 ]}
+    fov={50.75}
+    rotation={[ 0, 0, 0 ]}
+    zoom={0.7}
+    far={4200}
+    near={1.39}
+    scale={[ 0.2, 0.2, 0.2 ]}
 >
 
     <!-- {#snippet children({ref})}
