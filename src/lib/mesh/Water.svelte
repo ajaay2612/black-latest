@@ -114,7 +114,9 @@
         map={$floorTexture}
         normalMap={$floorNormalTexture}
         color="#000000"
-        roughness={0.8696}
+        roughness={1}
+        reflectivity={1}
+        metalness={0}
   
     />
     </T.Mesh>

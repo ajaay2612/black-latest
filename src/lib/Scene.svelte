@@ -92,7 +92,9 @@
 
 <!-- <T.AmbientLight intensity={2} visible /> -->
 <!-- <T.PointLight color="#f6a8a8" intensity={0.8096} scale={[ 1, 1, 1 ]} position={[ -0.486, -0.211, 1.0607 ]} distance={-2.3} power={9.2549} decay={8.1}/> -->
-<T.DirectionalLight position={[ -2.6311, 6.7201, -38.7693 ]} color="#ffffff" intensity={0.16} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
+<T.DirectionalLight position={[ -4.2311, 9.3201, -51.7693 ]} color="#fff4eb" intensity={0.15} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
+
+<T.DirectionalLight position={[ 0.4039, -0.3642, 0.8428 ]} color="#d183f8" intensity={5} target.position={[ -0.512, -1.871, -1.24 ]} visible scale={[ 0.01, 0.01, 0.01 ]} rotation={[ 0, 0, 0 ]}/>
 
 <!-- portal -->
 <T.Mesh position={[ -0.3248, -0.4189, 0.034 ]} scale={[ 0.263, 0.3218, 1 ]} visible>
