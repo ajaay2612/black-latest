@@ -59,8 +59,8 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
 </script>
 
 <T.Group bind:ref dispose={false} {...props} 
-    position={[ 0.3655, -0.6837, -0.3577 ]}
-    scale={[0.8, 0.8, 0.8]}
+    position={[ -0.4651, -0.642, 0.3977 ]}
+    scale={[ 0.2, 0.2, 0.2 ]}
     >
     {#await gltf}
         {@render fallback?.()}
@@ -73,7 +73,7 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
 
         <T.Mesh
             geometry={gltf.nodes.tripo_node_f589d329.geometry}
-            position={[ 0, 0, 0 ]}
+        
         >
             <MeshTransmissionMaterial {...meshTransmissionConfig} />
          

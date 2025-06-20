@@ -18,8 +18,13 @@
     const dracoLoader = useDraco();
     const groundGltf = useGltf("/model/ground.glb", { dracoLoader });
 
-    groundGltf.then((groundGltf) => {
-        console.log("gltf", groundGltf);
+    // groundGltf.then((groundGltf) => {
+    //     console.log("gltf", groundGltf);
+    // });
+    const terrainGltf = useGltf("/model/terrain.glb", { dracoLoader });
+
+    terrainGltf.then((terrainGltf) => {
+        console.log("terrainGltf", terrainGltf);
     });
 
     let { fallback, error, children, ref = $bindable(), ...props } = $props();
@@ -65,7 +70,7 @@
     {@render fallback?.()}
 {:then groundGltf}
     <T.Mesh
-        position={[ 0, -0.8258, -0.0024 ]}
+        position={[ 0, -0.8361, -0.0024 ]}
         rotation.y={deg2rad(10)}
         scale={[2.5, 2.5, 2.5]}
 
@@ -89,6 +94,41 @@
         sheen={0}
         sheenRoughness={0}
         clearcoatRoughness={0}
+    />
+    </T.Mesh>
+{/await}
+
+<!-- terrain -->
+
+{#await terrainGltf}
+    {@render fallback?.()}
+{:then terrainGltf}
+    <T.Mesh
+        position={[ -0.4378, -0.6696, -0.0024 ]}
+        rotation.y={deg2rad(10)}
+        scale={[1.2, 1.2, 1.2]}
+
+        geometry={terrainGltf.nodes.Plane001.geometry}
+        receiveShadow
+        castShadow
+        rotation={[ 0, 3.1416, 0 ]}
+    >
+    <T.MeshPhysicalMaterial
+        map={$floorTexture}
+        normalMap={$floorNormalTexture}
+        color="#000000"
+        opacity={1}
+        transparent={false}
+        roughness={0.1087}
+        metalness={0}
+        clipIntersection={false}
+        clipShadows={false}
+        reflectivity={0}
+        ior={0.0652}
+        sheen={0}
+        sheenRoughness={0}
+        clearcoatRoughness={0}
+        emissive="#000000"
     />
     </T.Mesh>
 {/await}
