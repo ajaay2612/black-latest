@@ -4,6 +4,7 @@
     import { TextureLoader } from 'three'
     import { useLoader } from '@threlte/core'
     import Water from '$lib/mesh/Water.svelte'
+    import CustomSky from '$lib/mesh/CustomSky.svelte'
     import Crystal from '$lib/mesh/Crystal.svelte'
     import Rock1 from '$lib/model/rock1.svelte'
     import {
@@ -99,6 +100,7 @@
 
 </script>
 
+<CustomSky/>
 
 
 <!-- <T.AmbientLight intensity={2} visible /> -->
@@ -106,7 +108,7 @@
 <T.PointLight color="#ffffff" intensity={0.2916} scale={[ 0.02, 0.02, 0.02 ]} position={[ -0.8055, -0.5111, 0.0801 ]} distance={0} power={4.2246} decay={2.1}/>
 
 
-<T.DirectionalLight position={[ -4.2311, 9.3201, -51.7693 ]} color="#fff4eb" intensity={0.15} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
+<T.DirectionalLight position={[ -4.2311, 9.3201, -51.7693 ]} color="#fff4eb" intensity={0.15} target.position={[ -1.5, -1.6, 0 ]} visible={false} scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
 
 <!-- <T.DirectionalLight position={[ 0.4039, -0.3642, 0.8428 ]} color="#d183f8" intensity={5} target.position={[ -0.512, -1.871, -1.24 ]} visible scale={[ 0.01, 0.01, 0.01 ]} rotation={[ 0, 0, 0 ]}/> -->
 
