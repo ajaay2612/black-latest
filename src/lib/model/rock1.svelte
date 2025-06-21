@@ -5,11 +5,11 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
 
 <script>
     import { T } from "@threlte/core";
-    import * as THREE from 'three';
+    import * as THREE from "three";
     import { useGltf, useDraco } from "@threlte/extras";
     import MeshTransmissionMaterial from "$lib/materials/MeshTransmissionMaterial.svelte";
     import { RectAreaLight } from "three";
-    import { Edges } from '@threlte/extras'
+    import { Edges } from "@threlte/extras";
 
     let { fallback, error, children, ref = $bindable(), ...props } = $props();
     const dracoLoader = useDraco();
@@ -20,24 +20,6 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
         console.log("gltf", gltfWire);
     });
 
-    // const meshTransmissionConfig = {
-    //     backside: true,
-    //     samples: 8,
-    //     resolution: 512,
-    //     roughness: 0.2,
-    //     thickness: 0.35,
-    //     // ior: 1,
-    //     chromaticAberration: 0.3,
-    //     anisotropy: 1,
-    //     distortion: 0.5,
-    //     distortionScale: 0.3,
-    //     temporalDistortion: 0.3,
-    //     clearcoat: 1,
-    //     attenuationDistance: 0.5,
-    //     attenuationColor: "#ffffff",
-    //     background: "#aa33ff",
-    //     color: "#470d57",
-    // };
     const meshTransmissionConfig = {
         backside: true,
         samples: 8,
@@ -58,60 +40,43 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
     };
 </script>
 
-<T.Group bind:ref dispose={false} {...props} 
-    
+<T.Group
+
+    bind:ref
+    dispose={false}
+    {...props}
+    position={[ 0.3138, -0.4987, 0.5202 ]}
     scale={[ 0.2, 0.2, 0.2 ]}
-    >
+
+    rotation={[ 0.5288, -0.1501, -0.2077 ]}
+>
     {#await gltf}
         {@render fallback?.()}
     {:then gltf}
-        <!-- <T.Mesh
-      geometry={gltf.nodes.Cylinder001.geometry}
-      material={material}
 
-    /> -->
+        <T.PointLight color="#ffffff" intensity={0.4886} scale={[ 0.02, 0.02, 0.02 ]} position={[ 0.1836, 0.3113, 0.2508 ]} distance={19} power={7.3395} decay={3.4}/>
 
         <T.Mesh
             geometry={gltf.nodes.tripo_node_f589d329.geometry}
             position={[ 0, 0, 0 ]}
-        
         >
             <MeshTransmissionMaterial {...meshTransmissionConfig} />
-         
         </T.Mesh>
 
         {#await gltfWire}
             {@render fallback?.()}
         {:then gltfWire}
             <T.Mesh
-            
                 geometry={gltfWire.nodes.tripo_node_f589d329001.geometry}
-            
-                position={[ 0.0134, 0.014, -0.014 ]}
-            
-                scale={[ 0.76, 0.75, 0.59 ]}
-            
+                position={[0.0134, 0.014, -0.014]}
+                scale={[0.76, 0.75, 0.59]}
                 receiveShadow
-            
                 castShadow
-            
             >
-                <T.MeshStandardMaterial
-                    color="#ffffff"
-                    visible
-                />
+                <T.MeshStandardMaterial color="#ffffff" visible />
             </T.Mesh>
-
         {/await}
 
-
-        
-        <!-- <T.Mesh 
-    scale={[ 0.005,0.005,0.005 ]}
-    position={[ 1.0516, -0.591, 0.4739 ]}>
-      <T.SphereGeometry args={[2,5,5]}/>
-      <T.MeshStandardMaterial emissive="#f88f8f" emissiveIntensity={2} envMapIntensity={0} roughness={1} metalness={0.8587} color="#fdb1b1"/>
-    </T.Mesh> -->
     {:catch err}
         {@render error?.({ error: err })}
     {/await}

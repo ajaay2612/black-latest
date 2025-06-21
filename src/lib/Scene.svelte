@@ -102,18 +102,10 @@
 
 <CustomSky/>
 
-
-<!-- <T.AmbientLight intensity={2} visible /> -->
-<T.PointLight color="#ffffff" intensity={0.1627} scale={[ 0.02, 0.02, 0.02 ]} position={[ 0.1836, -0.3632, 0.2508 ]} distance={2.5} power={1} decay={3.1}/>
-<T.PointLight color="#ffffff" intensity={0.2916} scale={[ 0.02, 0.02, 0.02 ]} position={[ -0.8055, -0.5111, 0.0801 ]} distance={0} power={4.2246} decay={2.1}/>
-
-
-<T.DirectionalLight position={[ -4.2311, 9.3201, -51.7693 ]} color="#fff4eb" intensity={0.15} target.position={[ -1.5, -1.6, 0 ]} visible={false} scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
-
-<!-- <T.DirectionalLight position={[ 0.4039, -0.3642, 0.8428 ]} color="#d183f8" intensity={5} target.position={[ -0.512, -1.871, -1.24 ]} visible scale={[ 0.01, 0.01, 0.01 ]} rotation={[ 0, 0, 0 ]}/> -->
+<T.DirectionalLight position={[ -0.1377, 0.7927, -2.3517 ]} color="#fff4eb" intensity={0.1} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
 
 <!-- portal -->
-<T.Mesh position={[ -0.3248, -0.3597, 0.034 ]} scale={[ 0.263, 0.3218, 1 ]} visible>
+<T.Mesh position={[ -0.3248, -0.3597, 0.034 ]} scale={[ 0.263, 0.3218, 1 ]} visible rotation={[ 0, 0, 0 ]}>
     <T.PlaneGeometry args={[1,1.5]} />
     <T.MeshStandardMaterial
         color="#ffffff"               
@@ -127,22 +119,21 @@
 <!-- ground -->
 <Water/>
 
-<!-- <Crystal/> -->
+<!-- rocks -->
+<Rock1/>
 
-<Rock1  position={[ 0.1508, -0.3843, 0.2003 ]}/>
-<Rock1 rotation={[ -3.1416, 0.5795, -3.1416 ]}   position={[-0.85,-0.57,0]}/>
-
-
+<!-- camera -->
 <T.PerspectiveCamera
     makeDefault
-    position={[ -0.2241, -0.4104, 1.6949 ]}
+    position={[ -0.3041, -0.2604, 1.7949 ]}
     matrixAutoUpdate
-    fov={50.75}
+    fov={60.25}
     rotation={[ 0, 0, 0 ]}
-    zoom={0.7}
-    far={4200}
-    near={1.39}
+    zoom={1}
+    far={27200}
+    near={0.1}
     scale={[ 0.2, 0.2, 0.2 ]}
+    visible
 >
 
     <!-- {#snippet children({ref})}
