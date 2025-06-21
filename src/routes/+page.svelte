@@ -10,11 +10,18 @@
 
 <div class="h-screen fixed left-0 top-0 w-full bg-[#000000]">
     <Canvas>
-        <!-- <Environment
-        isBackground={false}        
-        url="/hdr/sky.jpg" /> -->
+        <Environment
+        isBackground={!false}        
+        url="/hdr/HDR_white_dwarf_star.hdr" />
         <Studio>
-            <!-- <Sky elevation={0}/> -->
+            <!-- <Sky 
+                turbidity={20}
+                rayleigh={4}
+                azimuth={180.00}
+                elevation={-5} 
+                mieCoefficient={0.1}
+                mieDirectionalG={0.59}
+            /> -->
             <Scene />
         </Studio>
     </Canvas>

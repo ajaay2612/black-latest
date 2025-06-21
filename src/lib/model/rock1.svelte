@@ -60,7 +60,7 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
 
 <T.Group bind:ref dispose={false} {...props} 
     
-    scale={[ 0.2, 0.2, 0.2 ]} 
+    scale={[ 0.2, 0.2, 0.2 ]}
     >
     {#await gltf}
         {@render fallback?.()}
