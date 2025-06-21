@@ -1,5 +1,6 @@
 <script>
     import { T } from "@threlte/core";
+    import { useTask } from "@threlte/core";
 
     
     // Sky shader material with UV-based gradient
@@ -175,7 +176,31 @@
             gl_FragColor = vec4(starField, 1.0);
         }
     `;
-    import { useTask } from "@threlte/core";
+
+    
+
+    // Sky parameters for Threlte/Three.js
+    const skyParams = {
+        topColor: [0.00, 0.00, 0.00],
+        bottomColor: [0.00, 0.00, 0.00],
+        horizonColor: [(2/1.5)/255, (1/1.5)/255, (3/1.5)/255],
+        offset: 0,  // Now controls UV offset - positive shifts horizon up, negative down
+        exponent: 0.2,
+        horizonBlend: 15
+    };
+    
+    
+    // Star parameters
+    const starParams = {
+        starDensity:180.0,      // Higher = more stars
+        starBrightness: 1.5,    // Overall brightness
+        twinkleSpeed: 3,      // Twinkling animation speed
+        starSize: 5.5,          // Size multiplier
+        starColor1: [1.0, 1.0, 1.0],        // White stars
+        starColor2: [0.8, 0.9, 1.0],        // Slightly blue stars
+        starColor3: [1.0, 0.9, 0.7]         // Slightly warm stars
+    };
+
     
     let starMaterial = $state(null);
     let elapsedTime = 0; // Add this to accumulate time
@@ -186,29 +211,7 @@
             starMaterial.uniforms.time.value = elapsedTime; // Use accumulated time
         }
     });
-    
 
-    // Sky parameters for Threlte/Three.js
-    const skyParams = {
-        topColor: [0.00, 0.00, 0.00],
-        bottomColor: [0.00, 0.00, 0.00],
-        horizonColor: [5/255, 3/255, 8/255],
-        offset: 0,  // Now controls UV offset - positive shifts horizon up, negative down
-        exponent: 0.07,
-        horizonBlend: 15
-    };
-    
-    
-    // Star parameters
-    const starParams = {
-        starDensity:140.0,      // Higher = more stars
-        starBrightness: 1.5,    // Overall brightness
-        twinkleSpeed: 3,      // Twinkling animation speed
-        starSize: 4.2,          // Size multiplier
-        starColor1: [1.0, 1.0, 1.0],        // White stars
-        starColor2: [0.8, 0.9, 1.0],        // Slightly blue stars
-        starColor3: [1.0, 0.9, 0.7]         // Slightly warm stars
-    };
 
 </script>
 

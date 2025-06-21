@@ -113,7 +113,7 @@
 <!-- <T.DirectionalLight position={[ 0.4039, -0.3642, 0.8428 ]} color="#d183f8" intensity={5} target.position={[ -0.512, -1.871, -1.24 ]} visible scale={[ 0.01, 0.01, 0.01 ]} rotation={[ 0, 0, 0 ]}/> -->
 
 <!-- portal -->
-<T.Mesh position={[ -0.3248, -0.4189, 0.034 ]} scale={[ 0.263, 0.3218, 1 ]} visible>
+<T.Mesh position={[ -0.3248, -0.3597, 0.034 ]} scale={[ 0.263, 0.3218, 1 ]} visible>
     <T.PlaneGeometry args={[1,1.5]} />
     <T.MeshStandardMaterial
         color="#ffffff"               
