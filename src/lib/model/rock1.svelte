@@ -45,16 +45,20 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
     bind:ref
     dispose={false}
     {...props}
-    position={[ 0.3138, -0.4987, 0.5202 ]}
+    position={[ 0.1053, -0.3799, 0.2412 ]}
     scale={[ 0.2, 0.2, 0.2 ]}
 
-    rotation={[ 0.5288, -0.1501, -0.2077 ]}
+    rotation={[ 0, 0, 0 ]}
 >
     {#await gltf}
         {@render fallback?.()}
     {:then gltf}
 
-        <T.PointLight color="#ffffff" intensity={0.4886} scale={[ 0.02, 0.02, 0.02 ]} position={[ 0.1836, 0.3113, 0.2508 ]} distance={19} power={7.3395} decay={3.4}/>
+        <T.PointLight 
+            color="#ffffff" 
+            scale={[ 0.02, 0.02, 0.02 ]} 
+            position={[ 0.1836, 0.3113, 0.2508 ]} 
+        />
 
         <T.Mesh
             geometry={gltf.nodes.tripo_node_f589d329.geometry}
