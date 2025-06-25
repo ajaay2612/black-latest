@@ -103,7 +103,8 @@
 
 <CustomSky/>
 
-<T.DirectionalLight position={[ -0.1377, 0.7927, -2.3517 ]} color="#fff4eb" intensity={0.1} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
+
+<T.DirectionalLight position={[ -0.5269, 0.7927, -2.3517 ]} color="#fff4eb" intensity={0.1} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
 
 <!-- portal -->
 <Portal/>
@@ -117,15 +118,8 @@
 <!-- camera -->
 <T.PerspectiveCamera
     makeDefault
-    position={[ -0.2541, -0.2604, 1.8949 ]}
-    matrixAutoUpdate
+    position={[ -0.3341, -0.3804, 1.8949 ]}
     fov={65}
-    rotation={[ 0, 0, 0 ]}
-    zoom={1}
-    far={27200}
-    near={0.1}
-    scale={[ 0.2, 0.2, 0.2 ]}
-    visible
 >
 
     <!-- {#snippet children({ref})}

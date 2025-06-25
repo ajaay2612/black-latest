@@ -1,240 +1,257 @@
 <script>
-	import { T, useTask} from "@threlte/core";
-    import MeshTransmissionMaterial from "$lib/materials/MeshTransmissionMaterial.svelte";
-    import { PointLight } from "three";
-    let meshRef = null;
+    import { T, useTask } from "@threlte/core";
+    import { useGltf, useDraco } from "@threlte/extras";
+    import { PointLight, TextureLoader } from "three";
+    import { useLoader } from "@threlte/core";
+    import { writable } from 'svelte/store';
 
+    let { fallback, error, children, ref = $bindable(), ...props } = $props();
+    let meshRef = null;
+    const dracoLoader = useDraco();
+    const portalGltf = useGltf("/model/portal.glb", { dracoLoader });
+
+    const floorTexture = useLoader(TextureLoader).load(
+        "/textures/floor/seaside_rock_diff_4k.jpg",
+    );
+    const floorNormalTexture = useLoader(TextureLoader).load(
+        "/textures/floor/seaside_rock_nor_gl_4k.jpg",
+    );
+
+    portalGltf.then((portalGltf) => {
+        console.log("portalGltf", portalGltf);
+    });
+
+   
+    // Vertex shader
     const vertexShader = `
         varying vec2 vUv;
+        varying vec3 vPosition;
+        varying vec3 vNormal;
         
         void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        vUv = uv;
+        vPosition = position;
+        vNormal = normal;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
-        `;
+    `
 
+    // Fragment shader - the magic happens here
     const fragmentShader = `
-        uniform float iTime;
-        uniform vec3 iResolution;
+        uniform float uTime;
+        uniform vec3 uColor1;
+        uniform vec3 uColor2;
+        uniform float uOpacity;
+        uniform float uCloudDensity;
+        uniform float uCloudSpeed;
+        uniform float uTwirlStrength;
+        uniform float uRiseSpeed;
+        uniform float uEmissionStrength;
+        uniform vec3 uEmissionColor;
+        
         varying vec2 vUv;
-
-        vec4 permute_3d(vec4 x){ return mod(((x*34.0)+1.0)*x, 289.0); }
-        vec4 taylorInvSqrt3d(vec4 r){ return 1.79284291400159 - 0.85373472095314 * r; }
-
-        float simplexNoise3d(vec3 v)
-        {
-            const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
-            const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
-
-            // First corner
-            vec3 i  = floor(v + dot(v, C.yyy) );
-            vec3 x0 =   v - i + dot(i, C.xxx) ;
-
-            // Other corners
-            vec3 g = step(x0.yzx, x0.xyz);
-            vec3 l = 1.0 - g;
-            vec3 i1 = min( g.xyz, l.zxy );
-            vec3 i2 = max( g.xyz, l.zxy );
-
-            //  x0 = x0 - 0. + 0.0 * C
-            vec3 x1 = x0 - i1 + 1.0 * C.xxx;
-            vec3 x2 = x0 - i2 + 2.0 * C.xxx;
-            vec3 x3 = x0 - 1. + 3.0 * C.xxx;
-
-            // Permutations
-            i = mod(i, 289.0 );
-            vec4 p = permute_3d( permute_3d( permute_3d( i.z + vec4(0.0, i1.z, i2.z, 1.0 )) + i.y + vec4(0.0, i1.y, i2.y, 1.0 ))  + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-
-            // Gradients
-            // ( N*N points uniformly over a square, mapped onto an octahedron.)
-            float n_ = 1.0/7.0; // N=7
-            vec3  ns = n_ * D.wyz - D.xzx;
-
-            vec4 j = p - 49.0 * floor(p * ns.z *ns.z);  //  mod(p,N*N)
-
-            vec4 x_ = floor(j * ns.z);
-            vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
-
-            vec4 x = x_ *ns.x + ns.yyyy;
-            vec4 y = y_ *ns.x + ns.yyyy;
-            vec4 h = 1.0 - abs(x) - abs(y);
-
-            vec4 b0 = vec4( x.xy, y.xy );
-            vec4 b1 = vec4( x.zw, y.zw );
-
-            vec4 s0 = floor(b0)*2.0 + 1.0;
-            vec4 s1 = floor(b1)*2.0 + 1.0;
-            vec4 sh = -step(h, vec4(0.0));
-
-            vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-            vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-
-            vec3 p0 = vec3(a0.xy,h.x);
-            vec3 p1 = vec3(a0.zw,h.y);
-            vec3 p2 = vec3(a1.xy,h.z);
-            vec3 p3 = vec3(a1.zw,h.w);
-
-            // Normalise gradients
-            vec4 norm = taylorInvSqrt3d(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-            p0 *= norm.x;
-            p1 *= norm.y;
-            p2 *= norm.z;
-            p3 *= norm.w;
-
-            // Mix final noise value
-            vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-            m = m * m;
-            return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
+        varying vec3 vPosition;
+        varying vec3 vNormal;
+        
+        // Simple noise function
+        float random(vec2 st) {
+        return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
         }
-
-        float fbm3d(vec3 x, const in int it) {
-            float v = 0.0;
-            float a = 0.5;
-            vec3 shift = vec3(100);
-
-            
-            for (int i = 0; i < 32; ++i) {
-                if(i<it) {
-                    v += a * simplexNoise3d(x);
-                    x = x * 2.0 + shift;
-                    a *= 0.5;
-                }
-            }
-            return v;
+        
+        // Smooth noise
+        float noise(vec2 st) {
+        vec2 i = floor(st);
+        vec2 f = fract(st);
+        
+        float a = random(i);
+        float b = random(i + vec2(1.0, 0.0));
+        float c = random(i + vec2(0.0, 1.0));
+        float d = random(i + vec2(1.0, 1.0));
+        
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        
+        return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
         }
-
-        vec3 rotateZ(vec3 v, float angle) {
-            float cosAngle = cos(angle);
-            float sinAngle = sin(angle);
-            return vec3(
-                v.x * cosAngle - v.y * sinAngle,
-                v.x * sinAngle + v.y * cosAngle,
-                v.z
-            );
+        
+        // Fractal Brownian Motion for more complex noise
+        float fbm(vec2 st) {
+        float value = 0.0;
+        float amplitude = 0.5;
+        float frequency = 0.0;
+        
+        for (int i = 0; i < 4; i++) {
+            value += amplitude * noise(st);
+            st *= 2.0;
+            amplitude *= 0.5;
         }
-
-        float facture(vec3 vector) {
-            vec3 normalizedVector = normalize(vector);
-
-            return max(max(normalizedVector.x, normalizedVector.y), normalizedVector.z);
+        return value;
         }
-
-        vec3 emission(vec3 color, float strength) {
-            return color * strength;
-        }
-
-        void mainImage( out vec4 fragColor, in vec2 fragCoord )
-        {
-            // Normalized pixel coordinates (from 0 to 1) and (from -1 to 1)
-            vec2 uv = (fragCoord * 2.0 - iResolution.xy) / iResolution.y;
-            
-
-            vec3 color = vec3(uv.xy, 0.0);
-            color.z += 0.5;
-            
-            color = normalize(color);
-            color -= 0.2 * vec3(0.0, 0.0, iTime);
-            
-            float angle = -log2(length(uv)); // log base 0.5
-            
-            color = rotateZ( color, angle );
-            
-            float frequency = 1.4;
-            float distortion = 0.01;
-            color.x = fbm3d(color * frequency + 0.0, 5) + distortion;
-            color.y = fbm3d(color * frequency + 1.0, 5) + distortion;
-            color.z = fbm3d(color * frequency + 2.0, 5) + distortion;
-            vec3 noiseColor = color; // save
-            
-            noiseColor *= 2.0;
-            noiseColor -= 0.1;
-            noiseColor *= 0.188;
-            noiseColor += vec3(uv.xy, 0.0);
-            
-            float noiseColorLength = length(noiseColor);
-            noiseColorLength = 0.770 - noiseColorLength;
-            noiseColorLength *= 4.2;
-            noiseColorLength = pow(noiseColorLength, 1.0);
-            
-            
-            vec3 emissionColor = emission(vec3(0.961,0.592,0.078), noiseColorLength * 0.4);
-            
-            
-            float fac = length(uv) - facture(color + 0.32);
-            fac += 0.1;
-            fac *= 3.0;
-            
-            color = mix(emissionColor, vec3(fac), fac + 1.2);
-            
-            //color = mix(color, vec3(0), fac); // black style
-
-
-            // Output to screen
-            fragColor = vec4(color, 1.0);
-        }
-
+        
         void main() {
-            vec2 fragCoord = vUv * iResolution.xy;
-            vec4 fragColor;
-            mainImage(fragColor, fragCoord);
-            gl_FragColor = fragColor;
+        vec2 st = vUv;
+        
+        // Create twirl effect - distance from center affects rotation
+        vec2 center = vec2(0.5, 0.3); // Offset center downward for bottom-heavy effect
+        float distFromCenter = distance(st, center);
+        float angle = uTime * uTwirlStrength + distFromCenter * 2.0;
+        
+        // Apply twirl transformation
+        vec2 twirlOffset = vec2(
+            cos(angle) * distFromCenter * 0.1,
+            sin(angle) * distFromCenter * 0.1
+        );
+        
+        // Rising motion - clouds move upward and disperse
+        float riseOffset = uTime * uRiseSpeed;
+        vec2 risingUV = st + vec2(0.0, -riseOffset);
+        
+        // Apply twirl to the rising coordinates
+        risingUV += twirlOffset;
+        
+        // Create multiple layers of moving clouds with different behaviors
+        vec2 cloud1 = risingUV + vec2(uTime * uCloudSpeed * 0.1, 0.0);
+        vec2 cloud2 = risingUV + vec2(-uTime * uCloudSpeed * 0.08, uTime * uCloudSpeed * 0.02);
+        vec2 cloud3 = risingUV + vec2(uTime * uCloudSpeed * 0.06, -uTime * uCloudSpeed * 0.04);
+        
+        // Sample noise at different scales
+        float noise1 = fbm(cloud1 * 2.0);
+        float noise2 = fbm(cloud2 * 3.5);
+        float noise3 = fbm(cloud3 * 5.0);
+        
+        // Combine the noise layers
+        float cloudMask = (noise1 + noise2 * 0.6 + noise3 * 0.3) / 1.9;
+        
+        // Add spiral swirling motion
+        float spiral = sin(distFromCenter * 6.0 - uTime * 2.0) * 0.1;
+        cloudMask += spiral;
+        
+        // Create bottom-heavy fuming effect
+        float bottomWeight = 1.0 - smoothstep(0.0, 0.7, st.y);
+        bottomWeight = pow(bottomWeight, 1.5);
+        
+        // Enhance clouds at the bottom
+        cloudMask += bottomWeight * 0.3;
+        
+        // Create color mixing - uColor1 is main, uColor2 is trails/edges
+        float cloudDensity = smoothstep(0.3, 0.8, cloudMask);
+        vec3 color = mix(uColor2, uColor1, cloudDensity);
+        
+        // Add subtle edge trails with color2
+        float edgeTrails = smoothstep(0.1, 0.4, cloudMask) - smoothstep(0.4, 0.7, cloudMask);
+        color = mix(color, uColor2, edgeTrails * 0.5);
+        
+        // Add emission glow based on cloud density and movement
+        float emissionMask = smoothstep(0.4, 0.9, cloudMask);
+        
+        // Create pulsing emission effect
+        float pulse = sin(uTime * 2.0) * 0.5 + 0.5;
+        float emissionIntensity = emissionMask * uEmissionStrength * (0.7 + pulse * 0.3);
+        
+        // Mix emission color with base color
+        vec3 emission = uEmissionColor * emissionIntensity;
+        color += emission;
+        
+        // Add extra glow at the twirl center
+        float centerGlow = 1.0 - smoothstep(0.0, 0.3, distFromCenter);
+        centerGlow = pow(centerGlow, 2.0);
+        color += uEmissionColor * centerGlow * uEmissionStrength * 0.5;
+        
+        // Add some glow effect at the edges
+        float edgeGlow = 1.0 - distance(st, vec2(0.5));
+        edgeGlow = pow(edgeGlow, 1.5);
+        
+        // Fresnel effect for more mystical look
+        vec3 viewDirection = normalize(vPosition - cameraPosition);
+        float fresnel = 1.0 - abs(dot(viewDirection, vNormal));
+        fresnel = pow(fresnel, 2.0);
+        
+        // Final opacity calculation with bottom-heavy distribution
+        float finalOpacity = (cloudMask * uCloudDensity + fresnel * 0.2) * uOpacity * edgeGlow * (0.5 + bottomWeight * 0.5);
+        finalOpacity = clamp(finalOpacity, 0.0, 1.0);
+        
+        gl_FragColor = vec4(color, finalOpacity);
         }
-    `;
+    `
 
+    // Create reactive uniforms
+    const uniforms = writable({
+        uTime: { value: 0.0 },
+        uColor1: { value: [0,0,0].map(c => c / 255) }, // Main cloud color
+        uColor2: { value: [129, 56, 255].map(c => c / 255) }, // Trail/edge color
+        uOpacity: { value: 0.5 },
+        uCloudDensity: { value: 2 },
+        uCloudSpeed: { value: 5.0 },
+        uTwirlStrength: { value: 5.5 }, // Controls twirling intensity
+        uRiseSpeed: { value: 5555 }, // Controls how fast clouds rise from bottom
+        uEmissionStrength: { value: 3 }, // Controls glow intensity
+        uEmissionColor: { value: [129, 56, 255].map(c => c / 255) } // Bright emission color (can go above 1.0)
+    })
 
-
-    // useTask((delta) => {
-    //     // console.log(meshRef)
-    //     if (meshRef) {
-    //         meshRef.material.uniforms.iTime.value += delta;
-    //     }
-    // });
-
-    const meshTransmissionConfig = {
-        backside: true,
-        samples: 8,
-        resolution: 512,
-        roughness: 0.5,
-        thickness: 0.1,
-        // ior: 1,
-        chromaticAberration: 0.3,
-        anisotropy: 1,
-        distortion: 0.2,
-        distortionScale: 0.2,
-        temporalDistortion: 0.3,
-        clearcoat: 1,
-        attenuationDistance: 0.5,
-        attenuationColor: "#fff",
-        background: "#fff",
-        color: "#fff",
-    };
-
+    useTask((delta) => {
+        uniforms.update(u => ({
+        ...u,
+        uTime: { value: u.uTime.value + delta }
+        }))
+    })
 </script>
 
-<T.Group position={[ 0, 0.0043, 0 ]}>
-    <!-- <T.PointLight position={[ -0.3177, -0.084, 0.0383 ]} decay={2.2} distance={0.5} power={26.9434} intensity={1.587}/> -->
-    <T.Mesh
-    bind:ref={meshRef}
-    position={[ -0.3248, 0.2894, 0.034 ]} scale={[ 0.2, 1.89, 0.2 ]} visible rotation={[ 0, 0, 0 ]}>
-        <!-- <T.BoxGeometry args={[1,3,1]} /> -->
-        <T.PlaneGeometry args={[1, 1, 64, 64]} />
-        <T.MeshStandardMaterial
-            color="#ffffff"               
-            emissive="#ffffff"            
-            emissiveIntensity={0.9}
-            roughness={0.5}
-            metalness={0}        
+<T.Group bind:ref dispose={false} {...props} 
+scale={[ 0.35, 0.4, 0.3 ]}
+position={[ -0.3747, -0.6717, 0.0504 ]}>
+    {#await portalGltf}
+        {@render fallback?.()}
+    {:then portalGltf}
+        <T.PointLight
+            position={[ 0.0927, 1.8491, 0.0802 ]}
+            distance={21}
+            decay={2.5}
+            color={[129, 56, 255].map(c => c / 255)}
+            power={5}
+            visible
         />
-        <!-- <MeshTransmissionMaterial {...meshTransmissionConfig} /> -->
 
-        <!-- <T.ShaderMaterial
-            vertexShader={vertexShader}
-            fragmentShader={fragmentShader}
-            uniforms={{
-                iTime: { value: 0 },
-                iResolution: { value: [518, 180, 1] }
-            }}
-        /> -->
-    </T.Mesh>
+        <T.Mesh
+            geometry={portalGltf.nodes.right.geometry}
+        >
+            <T.MeshPhysicalMaterial
+                map={$floorTexture}
+                normalMap={$floorNormalTexture}
+                color="#000000"
+                roughness={1}
+                reflectivity={1}
+                metalness={0}
+        
+            />
+        </T.Mesh>
+        <T.Mesh
+            geometry={portalGltf.nodes.left.geometry}            
+        >
+            <T.MeshPhysicalMaterial
+                map={$floorTexture}
+                normalMap={$floorNormalTexture}
+                color="#000000"
+                roughness={1}
+                reflectivity={1}
+                metalness={0}
+        
+            />
+        </T.Mesh>
+        <T.Mesh
+            geometry={portalGltf.nodes.middle.geometry}
+            
+        >
+            <T.ShaderMaterial
+                {vertexShader}
+                {fragmentShader}
+                uniforms={$uniforms}
+                transparent={true}
+                side={2}
+                depthWrite={false}
+            />
+        </T.Mesh>
+    {:catch err}
+        {@render error?.({ error: err })}
+    {/await}
 
+    {@render children?.({ ref })}
 </T.Group>

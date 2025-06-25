@@ -395,11 +395,11 @@
 
     // Sky parameters for Threlte/Three.js
     const skyParams = {
-        topColor: [0.00, 0.00, 0.00],
-        bottomColor: [0.00, 0.00, 0.00],
-        horizonColor: [(2/1.5)/255, (1/1.5)/255, (3/1.5)/255],
+        topColor: [0.00, 0.00, 0.00].map(n => n/255),
+        bottomColor: [0.00, 0.00, 0.00].map(n => n/255),
+        horizonColor: [3, 0, 8].map(n => n/255), // Soft gray for horizon
         offset: 0,  // Now controls UV offset - positive shifts horizon up, negative down
-        exponent: 0.2,
+        exponent: 0.05,
         horizonBlend: 15
     };
     
@@ -408,7 +408,7 @@
     const starParams = {
         starDensity:180,      // Higher = more stars
         starBrightness: 4,    // Overall brightness
-        twinkleSpeed: 2.5,      // Twinkling animation speed
+        twinkleSpeed: 1,      // Twinkling animation speed
         starSize: 4.7,          // Size multiplier
         starColor1: [1.0, 1.0, 1.0],        // White stars
         starColor2: [0.8, 0.9, 1.0],        // Slightly blue stars
@@ -457,7 +457,7 @@
 </script>
 
 <!-- Sky Environment Sphere - Now you can lower it as much as you want -->
-<T.Mesh scale={[15, 15, 15]} position={[ 0, -1.6655, 0.4 ]}>
+<T.Mesh scale={[10, 10, 10]} position={[ 0, -1.6655, 0.4 ]}>
     <T.SphereGeometry args={[1, 32, 16]} />
     <T.ShaderMaterial
         vertexShader={skyVertexShader}
@@ -471,8 +471,8 @@
             horizonBlend: { value: skyParams.horizonBlend }
         }}
         side={1}
-        depthWrite={false}
-        depthTest={false}
+        transparent={true}
+        blending={2}
     />
 </T.Mesh>
 
@@ -496,8 +496,6 @@
         side={1}
         transparent={true}
         blending={2}
-        depthWrite={false}
-        depthTest={false}
     />
 </T.Mesh>
 
@@ -527,7 +525,5 @@
             starColor2: { value: nebulaParams.starColor2 }
         }}
         side={1}
-        depthWrite={false}
-        depthTest={false}
     />
 </T.Mesh>

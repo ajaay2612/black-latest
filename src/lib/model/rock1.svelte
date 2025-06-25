@@ -16,9 +16,9 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
     const gltf = useGltf("/model/rocks2.glb", { dracoLoader });
     const gltfWire = useGltf("/model/rocks2wire.glb", { dracoLoader });
 
-    gltfWire.then((gltfWire) => {
-        console.log("gltf", gltfWire);
-    });
+    // gltfWire.then((gltfWire) => {
+    //     console.log("gltf", gltfWire);
+    // });
 
     const meshTransmissionConfig = {
         backside: true,
@@ -45,10 +45,12 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
     bind:ref
     dispose={false}
     {...props}
-    position={[ 0.1053, -0.3799, 0.2412 ]}
+    position={[ -0.8724, -0.5802, 0.1986 ]}
     scale={[ 0.2, 0.2, 0.2 ]}
 
     rotation={[ 0, 0, 0 ]}
+
+    visible
 >
     {#await gltf}
         {@render fallback?.()}
@@ -57,7 +59,10 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
         <T.PointLight 
             color="#ffffff" 
             scale={[ 0.02, 0.02, 0.02 ]} 
-            position={[ 0.1836, 0.3113, 0.2508 ]} 
+            position={[ 0.1836, 0.4263, -0.0672 ]} 
+            intensity={0.62} 
+            decay={-0.02} 
+            distance={-11} 
         />
 
         <T.Mesh
