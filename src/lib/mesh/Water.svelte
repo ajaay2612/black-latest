@@ -78,6 +78,7 @@
         receiveShadow
         castShadow
         rotation={[ 0, 0, 0 ]}
+        visible={false}
     >
     <T.MeshPhysicalMaterial
         map={$floorTexture}

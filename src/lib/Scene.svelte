@@ -6,6 +6,7 @@
     import Water from '$lib/mesh/Water.svelte'
     import CustomSky from '$lib/mesh/CustomSky.svelte'
     import Crystal from '$lib/mesh/Crystal.svelte'
+    import Portal from '$lib/mesh/Portal.svelte'
     import Rock1 from '$lib/model/rock1.svelte'
     import {
         useGltf,
@@ -105,16 +106,7 @@
 <T.DirectionalLight position={[ -0.1377, 0.7927, -2.3517 ]} color="#fff4eb" intensity={0.1} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
 
 <!-- portal -->
-<T.Mesh position={[ -0.3248, -0.3597, 0.034 ]} scale={[ 0.263, 0.3218, 1 ]} visible rotation={[ 0, 0, 0 ]}>
-    <T.PlaneGeometry args={[1,1.5]} />
-    <T.MeshStandardMaterial
-        color="#ffffff"               
-        emissive="#ffffff"            
-        emissiveIntensity={0.9}
-        roughness={0.5}
-        metalness={0}        
-    />
-</T.Mesh>
+<Portal/>
 
 <!-- ground -->
 <Water/>
@@ -125,9 +117,9 @@
 <!-- camera -->
 <T.PerspectiveCamera
     makeDefault
-    position={[ -0.3041, -0.2604, 1.7949 ]}
+    position={[ -0.2541, -0.2604, 1.8949 ]}
     matrixAutoUpdate
-    fov={60.25}
+    fov={65}
     rotation={[ 0, 0, 0 ]}
     zoom={1}
     far={27200}
