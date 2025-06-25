@@ -179,11 +179,11 @@
         uColor1: { value: [0,0,0].map(c => c / 255) }, // Main cloud color
         uColor2: { value: [129, 56, 255].map(c => c / 255) }, // Trail/edge color
         uOpacity: { value: 0.5 },
-        uCloudDensity: { value: 2 },
+        uCloudDensity: { value: 8 },
         uCloudSpeed: { value: 5.0 },
-        uTwirlStrength: { value: 5.5 }, // Controls twirling intensity
+        uTwirlStrength: { value: 0.8 }, // Controls twirling intensity
         uRiseSpeed: { value: 5555 }, // Controls how fast clouds rise from bottom
-        uEmissionStrength: { value: 3 }, // Controls glow intensity
+        uEmissionStrength: { value: 4 }, // Controls glow intensity
         uEmissionColor: { value: [129, 56, 255].map(c => c / 255) } // Bright emission color (can go above 1.0)
     })
 

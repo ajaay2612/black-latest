@@ -397,10 +397,10 @@
     const skyParams = {
         topColor: [0.00, 0.00, 0.00].map(n => n/255),
         bottomColor: [0.00, 0.00, 0.00].map(n => n/255),
-        horizonColor: [3, 0, 8].map(n => n/255), // Soft gray for horizon
-        offset: 0,  // Now controls UV offset - positive shifts horizon up, negative down
-        exponent: 0.05,
-        horizonBlend: 15
+        horizonColor: [3, 3, 15].map(n => n/255),
+        offset: 0, 
+        exponent: 0.015,
+        horizonBlend: 18
     };
     
     
