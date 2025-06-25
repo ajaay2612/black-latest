@@ -11,7 +11,7 @@
 
 <div class="h-screen fixed left-0 top-0 w-full bg-[#000000]">
     <Canvas>   
-        <Studio>
+        <!-- <Studio> -->
             <!-- <Sky 
                 turbidity={20}
                 rayleigh={4}
@@ -21,6 +21,6 @@
                 mieDirectionalG={0.59}
             /> -->
             <Scene />
-        </Studio>
+        <!-- </Studio> -->
     </Canvas>
 </div>
