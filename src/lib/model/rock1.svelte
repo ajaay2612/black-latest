@@ -45,7 +45,7 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
     bind:ref
     dispose={false}
     {...props}
-    position={[ -0.7222, -0.563, 0.364 ]}
+    position={[ -1.2042, -0.7329, 0.364 ]}
     scale={[ 0.2, 0.2, 0.2 ]}
 
     rotation={[ 0, 0, 0 ]}

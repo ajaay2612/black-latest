@@ -111,8 +111,10 @@
 <!-- camera -->
 <T.PerspectiveCamera
     makeDefault
-    position={[ -0.3341, -0.3804, 1.8949 ]}
-    fov={65}
+    position={[ 0.3559, -0.6004, 2.7949 ]}
+    fov={44.75}
+    scale={[ 1, 1, 1 ]}
+    rotation={[ 0.1641, 0.2601, -0.0227 ]}
 >
 
     <!-- {#snippet children({ref})}
