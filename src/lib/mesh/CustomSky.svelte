@@ -477,7 +477,7 @@
 </T.Mesh>
 
 <!-- Stars Layer - Rendered after/over your sky -->
-<T.Mesh scale={[9, 9, 9]} position={[0, -1.6655, 0.4]} rotation={[ -0.0992, 1.4269, -0.3576 ]}>
+<T.Mesh scale={[9, 9, 9]} position={[ -0.0015, -1.6921, 0.413 ]} rotation={[ -0.0992, 1.4269, -0.3576 ]}>
     <T.SphereGeometry args={[1, 32, 16]} />
     <T.ShaderMaterial
         bind:ref={starMaterial}

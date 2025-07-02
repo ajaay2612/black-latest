@@ -30,13 +30,6 @@
         KernelSize,
     } from 'postprocessing'
 
-
-
-
-    function deg2rad(n) {
-        return n * (Math.PI/180)
-    }
-
     const {     
         scene,
         renderer,

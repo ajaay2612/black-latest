@@ -45,7 +45,7 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
     bind:ref
     dispose={false}
     {...props}
-    position={[ -0.8724, -0.5802, 0.1986 ]}
+    position={[ -0.7222, -0.563, 0.364 ]}
     scale={[ 0.2, 0.2, 0.2 ]}
 
     rotation={[ 0, 0, 0 ]}
@@ -61,8 +61,10 @@ Command: npx @threlte/gltf@3.0.1 static/model/rock1.glb -T
             scale={[ 0.02, 0.02, 0.02 ]} 
             position={[ 0.1836, 0.4263, -0.0672 ]} 
             intensity={0.62} 
-            decay={-0.02} 
+            decay={-0.104} 
             distance={-11} 
+            visible 
+            power={0.7911} 
         />
 
         <T.Mesh

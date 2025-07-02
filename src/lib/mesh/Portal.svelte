@@ -4,14 +4,14 @@
     import { PointLight, TextureLoader } from "three";
     import { useLoader } from "@threlte/core";
     import { writable } from 'svelte/store';
-
+    import * as THREE from "three"
     // Enable interactivity
     interactivity();
 
     let { fallback, error, children, ref = $bindable(), ...props } = $props();
     let meshRef = null;
     const dracoLoader = useDraco();
-    const portalGltf = useGltf("/model/portal.glb", { dracoLoader });
+    const portalGltf = useGltf("/model/newportal.glb", { dracoLoader });
 
     const floorTexture = useLoader(TextureLoader).load(
         "/textures/floor/seaside_rock_diff_4k.jpg",
@@ -20,8 +20,9 @@
         "/textures/floor/seaside_rock_nor_gl_4k.jpg",
     );
 
+
     portalGltf.then((portalGltf) => {
-        console.log("portalGltf", portalGltf);
+        console.log("portalGltf", portalGltf.nodes.main.material.shading);
     });
 
     // Vertex shader
@@ -217,7 +218,7 @@
         uRiseSpeed: { value: 1 }, // Controls how fast clouds rise from bottom
         uEmissionStrength: { value: 4 }, // Controls glow intensity
         uEmissionColor: { value: [129, 56, 255].map(c => c / 255) }, // Bright emission color
-        pos: { value: [0.5, 0.5] }, // Position of the hole (x, y in UV coordinates 0-1)
+        pos: { value: [0, 0] }, // Position of the hole (x, y in UV coordinates 0-1)
         uResolution: { value: [0.5, 1] } // Add resolution uniform
     });
 
@@ -287,21 +288,24 @@
 </script>
 
 <T.Group bind:ref dispose={false} {...props} 
-scale={[ 0.35, 0.4, 0.3 ]}
-position={[ -0.3747, -0.6717, 0.0504 ]}>
+rotation={[ 0, -1.5708, 0 ]}  
+position={[ -0.3719, -0.8118, 0 ]} 
+scale={[ 2.5, 2.5, 2.5 ]} 
+>
     {#await portalGltf}
         {@render fallback?.()}
     {:then portalGltf}
         <T.PointLight
-            position={[ 0.0927, 1.8491, 0.0802 ]}
             distance={21}
-            decay={2.5}
+            decay={1.6}
             color={[129, 56, 255].map(c => c / 255)}
-            power={5}
-            visible
+            power={3.5867}
+            position={[ -0.0094, 0.4529, -0.1206 ]}
+            intensity={0.0467}
+            
         />
 
-        <T.Mesh
+        <!-- <T.Mesh
             geometry={portalGltf.nodes.right.geometry}
         >
             <T.MeshPhysicalMaterial
@@ -325,15 +329,45 @@ position={[ -0.3747, -0.6717, 0.0504 ]}>
                 reflectivity={1}
                 metalness={0}
             />
-        </T.Mesh>
-        
+        </T.Mesh> -->
         <T.Mesh
+            geometry={portalGltf.nodes.main.geometry}
+                
+        >
+            <T.MeshPhysicalMaterial
+                map={$floorTexture}
+                normalMap={$floorNormalTexture}
+                color="#955b2a"
+                roughness={0.7391}
+                ior={0.3043}
+            />
+        </T.Mesh> 
+        
+        <!-- <T.Mesh
             bind:ref={meshRef}
             geometry={portalGltf.nodes.middle.geometry}
             onpointerenter={handlePointerEnter}
             onpointerleave={handlePointerLeave}
             onpointermove={handlePointerMove}
+        
         >
+           
+            <T.ShaderMaterial
+                {vertexShader}
+                {fragmentShader}
+                uniforms={$uniforms}
+                transparent={true}
+                side={2}
+                depthWrite={false}
+            />
+        </T.Mesh> -->
+        <T.Mesh
+            bind:ref={meshRef}
+            geometry={portalGltf.nodes.portal.geometry}
+            position={[ -0.0281, 0, 0 ]}
+            scale={[ 1, 1, 1 ]}
+        >
+           
             <T.ShaderMaterial
                 {vertexShader}
                 {fragmentShader}

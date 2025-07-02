@@ -8,6 +8,7 @@
     import { onMount } from "svelte";
     import { useGltf, useDraco } from "@threlte/extras";
 
+    // iska file size optimise
     const floorTexture = useLoader(TextureLoader).load(
         "/textures/floor/seaside_rock_diff_4k.jpg",
     );
@@ -49,14 +50,15 @@
         color: params.color,
         scale: params.scale,
         flowDirection: new THREE.Vector2(params.flowX, params.flowY),
-        textureWidth: 1024,
-        textureHeight: 1024,
+        textureWidth: 500,
+        textureHeight: 500,
         reflectivity: 0.3,
     };
 
     useTask(() => {});
 </script>
 
+<!-- isko optimise karna h, phone me this is shit -->
 <T.Water
     args={[new THREE.PlaneGeometry(3, 3), waterParams]}
     position={[0.0226, -0.76, 0]}
@@ -66,7 +68,7 @@
 
 <!-- floor -->
 
-{#await groundGltf}
+<!-- {#await groundGltf}
     {@render fallback?.()}
 {:then groundGltf}
     <T.Mesh
@@ -97,15 +99,15 @@
         clearcoatRoughness={0}
     />
     </T.Mesh>
-{/await}
+{/await} -->
 
 <!-- terrain -->
 
-{#await terrainGltf}
+<!-- {#await terrainGltf}
     {@render fallback?.()}
 {:then terrainGltf}
     <T.Mesh
-        position={[ -0.4378, -0.6696, -0.0024 ]}
+        position={[ -0.4378, -0.7, -0.0024 ]}
         rotation.y={deg2rad(10)}
         scale={[1.2, 1.2, 1.2]}
         geometry={terrainGltf.nodes.Plane001.geometry}
@@ -123,7 +125,7 @@
   
     />
     </T.Mesh>
-{/await}
+{/await} -->
 
     <!-- draft 1 -->
   <!-- <T.MeshPhysicalMaterial
