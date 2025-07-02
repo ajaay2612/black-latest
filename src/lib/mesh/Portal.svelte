@@ -373,8 +373,6 @@ scale={[ 2.5, 2.5, 2.5 ]}
                 {fragmentShader}
                 uniforms={$uniforms}
                 transparent={true}
-                side={2}
-                depthWrite={false}
             />
         </T.Mesh>
     {:catch err}
