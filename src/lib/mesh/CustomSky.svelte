@@ -406,10 +406,10 @@
     
     // Star parameters
     const starParams = {
-        starDensity:1200,      // Higher = more stars
+        starDensity:100,      // Higher = more stars
         starBrightness: 4,    // Overall brightness
         twinkleSpeed: 1,      // Twinkling animation speed
-        starSize: 12,          // Size multiplier
+        starSize: 5,          // Size multiplier
         starColor1: [1.0, 1.0, 1.0],        // White stars
         starColor2: [0.8, 0.9, 1.0],        // Slightly blue stars
         starColor3: [1.0, 0.9, 0.7]         // Slightly warm stars
@@ -428,15 +428,15 @@
 
     // Nebula parameters
     const nebulaParams = {
-        nebulaColor1: [4, 1, 8].map(n=> n/255),     // Deep blue
-        nebulaColor2: [0,0,2].map(n=> n/255),     // Purple/magenta
+        nebulaColor1: [4, 2, 8].map(n=> n/255),     // Deep blue
+        nebulaColor2: [0,5,0].map(n=> n/255),     // Purple/magenta
         nebulaColor3: [12, 15, 43].map(n=> n/255),     // Bright cyan
         nebulaIntensity: 0.2,
-        nebulaScale: 18.0,                   // Increased for more detail in smaller area
-        nebulaSpeed: 1,
+        nebulaScale: 19.0,                   // Increased for more detail in smaller area
+        nebulaSpeed: 2,
         nebulaCenter: [0.6, 0.4],          // Position on sphere (0-1 range for UV coordinates)
         nebulaRadius: 0.09,                 // Size of the nebula patch (0-1 range)
-        nebulaFalloff: 2,                 // How sharply the nebula fades at edges (higher = sharper)
+        nebulaFalloff: 4,                 // How sharply the nebula fades at edges (higher = sharper)
         starDensity: 0,
         starBrightness: 1.8,
         twinkleSpeed: 1.5,
@@ -477,7 +477,7 @@
 </T.Mesh>
 
 <!-- Stars Layer - Rendered after/over your sky -->
-<T.Mesh scale={[9, 9, 9]} position={[ -0.0015, -1.6921, 0.413 ]} rotation={[ -0.0992, 1.4269, -0.3576 ]}>
+<T.Mesh scale={[9, 9, 9]} position={[ -0.0015, -1.6921, 0.413 ]} rotation={[ 0.0073, 2.1076, -0.41 ]}>
     <T.SphereGeometry args={[1, 32, 16]} />
     <T.ShaderMaterial
         bind:ref={starMaterial}
