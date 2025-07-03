@@ -420,7 +420,7 @@ scale={[ 2.5, 2.5, 2.5 ]}
         </T.Mesh> -->
 
 
-        <!-- <InstancedMesh {limit} range={limit}>
+        <InstancedMesh {limit} range={limit}>
             <T.SphereGeometry 
             args={[0.008,30,30]}
             />
@@ -435,7 +435,7 @@ scale={[ 2.5, 2.5, 2.5 ]}
                     position={instance}
                 />
             {/each}
-        </InstancedMesh> -->
+        </InstancedMesh>
 
     {:catch err}
         {@render error?.({ error: err })}
