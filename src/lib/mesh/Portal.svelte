@@ -229,7 +229,7 @@
     
     // Create 15 particle instances
     let instances = $state([]);
-    const limit = 150;
+    const limit = 50;
     const width = 5
     const gap = 2.5
     const offset = (width * gap) / 2
@@ -263,30 +263,95 @@
     const scaleMin = 0;
     const scaleMax = 0.2;
     const scaleCycleDuration = 3;
+    
+    const attractorStrength = 0.001; // How strong the attraction is
+    const maxAttractorDistance = 1.5; // Maximum distance for attraction
+
+    // Add these new variables after your existing particle variables
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetAttractorX = 0;
+    let targetAttractorY = 0.2;
+    let currentAttractorX = 0;
+    let currentAttractorY = 0.2;
+    
+    let attractorCenter = [currentAttractorX, currentAttractorY, 0]; // Dynamic attractor center
+
+
+    // Mouse event handlers
+    let canvasElement;
+
+    function handleMouseMove(event) {
+        if (canvasElement) {
+            const rect = canvasElement.getBoundingClientRect();
+            // Normalize mouse coordinates to -1 to 1 range
+            mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouseY = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+            
+            // Map mouse coordinates to your world space
+            // Adjust these multipliers based on your portal size and position
+            targetAttractorX = mouseX * 0.3; // Scale down the movement
+            targetAttractorY = 0.2 + mouseY * 0.2; // Keep base Y at 0.2, add mouse influence
+        }
+    }
+
+    // Add this in your onMount or component initialization
+    onMount(() => {
+        canvasElement = document.querySelector('canvas');
+        if (canvasElement) {
+            canvasElement.addEventListener('mousemove', handleMouseMove);
+            
+            return () => {
+                canvasElement.removeEventListener('mousemove', handleMouseMove);
+            };
+        }
+    });
+
+
     // Animation task
     useTask((delta) => {
         time += delta;
-            
+        
+        // Lerp the attractor center towards the mouse position
+        const lerpSpeed = 5; // Adjust this for smoother/faster following
+        currentAttractorX += (targetAttractorX - currentAttractorX) * lerpSpeed * delta;
+        currentAttractorY += (targetAttractorY - currentAttractorY) * lerpSpeed * delta;
+        
+        // Update the attractor center
+        attractorCenter = [currentAttractorX, currentAttractorY, 0];
+        
+
         // Animate particle positions
         for (let i = 0; i < limit; i++) {
             const [origX, origY, origZ] = originalPositions[i];
             
             // Create floating motion
             const offset = i * 0.1; // Stagger the animation
-            const x = origX + Math.sin(time * floatSpeed + offset) * 0.01;
-            const y = origY + Math.cos(time * floatSpeed * 0.7 + offset) * 0.02;
-            const z = origZ + Math.sin(time * floatSpeed * 0.3 + offset) * 0.01;
+            let x = origX + Math.sin(time * floatSpeed + offset) * 0.01;
+            let y = origY + Math.cos(time * floatSpeed * 0.7 + offset) * 0.02;
+            let z = origZ + Math.sin(time * floatSpeed * 0.3 + offset) * 0.01;
+            
+            // Add attractor effect
+            const currentPos = [x, y, z];
+            const dx = attractorCenter[0] - currentPos[0];
+            const dy = attractorCenter[1] - currentPos[1];
+            const dz = attractorCenter[2] - currentPos[2];
+            
+            const distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
+            
+            if (distance < maxAttractorDistance && distance > 0) {
+                const attractionForce = attractorStrength / (distance * distance);
+                x += dx * attractionForce;
+                y += dy * attractionForce;
+                z += dz * attractionForce;
+            }
             
             dynamicPositions[i] = [x, y, z];
 
-            // Updated scale animation with configurable min/max and cycle duration
+            // Scale animation (keep existing)
             const scaleTime = (time * 1.5 + scaleOffsets[i]) % scaleCycleDuration;
             const normalizedTime = scaleTime / scaleCycleDuration;
-            
-            // Create a sine wave that goes from 0 to 1 and back to 0
             const sineValue = Math.sin(normalizedTime * Math.PI);
-            
-            // Map the sine value to the desired range
             dynamicScales[i] = scaleMin + (scaleMax - scaleMin) * sineValue;
         }
         

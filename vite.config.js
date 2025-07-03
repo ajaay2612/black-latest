@@ -8,5 +8,11 @@ export default defineConfig({
 		threlteStudio(),
 		tailwindcss(),
 		sveltekit()
-	]
+	],
+	ssr: {
+		noExternal: ['@dimforge/rapier3d-compat', '@threlte/rapier']
+	},
+	optimizeDeps: {
+		exclude: ['@dimforge/rapier3d-compat']
+	}
 });
