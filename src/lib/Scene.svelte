@@ -115,7 +115,7 @@
 
 </script>
 
-<!-- <CustomSky/> -->
+<CustomSky/>
 
 <!-- <T.Mesh 
 bind:ref={godRaysLight}

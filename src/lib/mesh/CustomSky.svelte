@@ -397,7 +397,7 @@
     const skyParams = {
         topColor: [0.00, 0.00, 0.00].map(n => n/255),
         bottomColor: [0.00, 0.00, 0.00].map(n => n/255),
-        horizonColor: [3, 3, 15].map(n => n/255),
+        horizonColor: [1, 1.1, 1].map(n => n/255),
         offset: 0, 
         exponent: 0.015,
         horizonBlend: 18
@@ -406,10 +406,10 @@
     
     // Star parameters
     const starParams = {
-        starDensity:180,      // Higher = more stars
+        starDensity:1200,      // Higher = more stars
         starBrightness: 4,    // Overall brightness
         twinkleSpeed: 1,      // Twinkling animation speed
-        starSize: 4.7,          // Size multiplier
+        starSize: 12,          // Size multiplier
         starColor1: [1.0, 1.0, 1.0],        // White stars
         starColor2: [0.8, 0.9, 1.0],        // Slightly blue stars
         starColor3: [1.0, 0.9, 0.7]         // Slightly warm stars
@@ -500,7 +500,7 @@
 </T.Mesh>
 
 <!-- Nebula Sky Sphere -->
-<T.Mesh scale={[ 11, 15, 15 ]} position={[0, -1.6655, 0.4]} rotation={[ 0.9808, -1.0228, -2.0961 ]}>
+<T.Mesh scale={[ 11, 15, 15 ]} position={[0, -1.6655, 0.4]} rotation={[ 0.911, -0.5865, -2.0961 ]}>
     <T.SphereGeometry args={[1, 32, 16]} />
     <T.ShaderMaterial
         bind:ref={nebulaMaterial}

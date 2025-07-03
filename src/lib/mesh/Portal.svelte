@@ -22,7 +22,7 @@
 
 
     portalGltf.then((portalGltf) => {
-        console.log("portalGltf", portalGltf.nodes.main.material.shading);
+        console.log("portalGltf", portalGltf.nodes);
     });
 
 
@@ -235,7 +235,7 @@
     const offset = (width * gap) / 2
 
     const xMin = -0.2, xMax = 0.25;     // x between -1 and 2
-    const yMin = -0.0, yMax = 0.4;     // y between -2 and 1  
+    const yMin = -0.0, yMax = 0.37;     // y between -2 and 1  
     const zMin = -0.1, zMax = 0.1; // z between -1.5 and 1.5
 
     // Store original positions and create dynamic positions
@@ -275,7 +275,7 @@
     let currentAttractorX = 0;
     let currentAttractorY = 0.2;
     
-    let attractorCenter = [currentAttractorX, currentAttractorY, 0]; // Dynamic attractor center
+    let attractorCenter = $state([currentAttractorX, currentAttractorY, 3]); // Dynamic attractor center
 
 
     // Mouse event handlers
@@ -285,13 +285,13 @@
         if (canvasElement) {
             const rect = canvasElement.getBoundingClientRect();
             // Normalize mouse coordinates to -1 to 1 range
-            mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouseX = -((event.clientX - rect.left) / rect.width) * 2 - 1;
             mouseY = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
             
             // Map mouse coordinates to your world space
             // Adjust these multipliers based on your portal size and position
-            targetAttractorX = mouseX * 0.3; // Scale down the movement
-            targetAttractorY = 0.2 + mouseY * 0.2; // Keep base Y at 0.2, add mouse influence
+            targetAttractorX = 0.8+ mouseX * 0.3; // Scale down the movement
+            targetAttractorY = 0.2+ mouseY * 0.2; // Keep base Y at 0.2, add mouse influence
         }
     }
 
@@ -378,7 +378,7 @@ scale={[ 2.5, 2.5, 2.5 ]}
     {#await portalGltf}
         {@render fallback?.()}
     {:then portalGltf}
-      
+    
         <T.Mesh
             geometry={portalGltf.nodes.main.geometry}
         >
@@ -390,8 +390,10 @@ scale={[ 2.5, 2.5, 2.5 ]}
                 ior={0.3043}
             />
         </T.Mesh> 
+
         
-   
+      
+        
         <T.Mesh
             geometry={portalGltf.nodes.portal.geometry}
             position={[ -0.0281, 0, 0 ]}
@@ -405,6 +407,17 @@ scale={[ 2.5, 2.5, 2.5 ]}
                 transparent={true}
             />
         </T.Mesh>
+
+   
+        <!-- <T.Mesh position={attractorCenter}>
+            <T.SphereGeometry 
+            args={[0.1,30,30]}
+            />
+            <T.MeshStandardMaterial
+            color="red"
+            emissive="red"
+            />
+        </T.Mesh> -->
 
 
         <InstancedMesh {limit} range={limit}>
