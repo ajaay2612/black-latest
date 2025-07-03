@@ -1,12 +1,11 @@
 <script>
     import { T, useTask } from "@threlte/core";
-    import { useGltf, useDraco, interactivity, Instance, InstancedMesh } from "@threlte/extras";
+    import { useGltf, useDraco, interactivity } from "@threlte/extras";
     import { PointLight, TextureLoader } from "three";
     import { useLoader } from "@threlte/core";
     import { writable } from 'svelte/store';
     import * as THREE from "three"
-    import { onMount } from "svelte";
-
+    // Enable interactivity
     interactivity();
 
     let {  fallback, error, children, ref = $bindable(), ...props } = $props();
@@ -25,6 +24,8 @@
         console.log("portalGltf", portalGltf.nodes.main.material.shading);
     });
 
+
+    let portalMeshRef = $state(null)
 
     // Vertex shader
     const vertexShader = `
@@ -223,89 +224,72 @@
         uResolution: { value: [0.5, 1] } // Add resolution uniform
     });
 
-
-    // particles
-    import { spring } from 'svelte/motion';
-    
-    // Create 15 particle instances
-    let instances = $state([]);
-    const limit = 150;
-    const width = 5
-    const gap = 2.5
-    const offset = (width * gap) / 2
-
-    const xMin = -0.2, xMax = 0.25;     // x between -1 and 2
-    const yMin = -0.0, yMax = 0.4;     // y between -2 and 1  
-    const zMin = -0.1, zMax = 0.1; // z between -1.5 and 1.5
-
-    // Store original positions and create dynamic positions
-    let originalPositions = [];
-    let dynamicPositions = [];
-    let dynamicScales = $state([]); 
-    let scaleOffsets  = $state([]); 
-    let dynamicEmissive = $state(0);
-
-    for (let i = 0; i < limit; i += 1) {
-        const x = Math.random() * (xMax - xMin) + xMin;
-        const y = Math.random() * (yMax - yMin) + yMin;
-        const z = Math.random() * (zMax - zMin) + zMin;
-        originalPositions.push([x, y, z]);
-        dynamicPositions.push([x, y, z]);
-        dynamicScales.push(0); // Start at 0
-        scaleOffsets.push(Math.random() * 5); // Random offset between 0-3
-    }
-
-    // Animation variables
-    let time = 0;
-    const particleRadius = 0.05;
-    const floatSpeed = 1;
-    const emissiveSpeed = 10;
-    const scaleMin = 0;
-    const scaleMax = 0.2;
-    const scaleCycleDuration = 3;
-    // Animation task
-    useTask((delta) => {
-        time += delta;
+    // Interactive event handlers
+    const handlePointerMove = (e) => {
+        // Get the UV coordinates from the intersection
+        if (e.uv && portalMeshRef?.material?.uniforms) {
+            console.log('UV coordinates:', e.uv.x, e.uv.y);
             
-        // Animate particle positions
-        for (let i = 0; i < limit; i++) {
-            const [origX, origY, origZ] = originalPositions[i];
+            // Direct uniform update
+            portalMeshRef.material.uniforms.pos.value[0] = e.uv.x;
+            portalMeshRef.material.uniforms.pos.value[1] = e.uv.y;
+            portalMeshRef.material.uniforms.pos.needsUpdate = true;
             
-            // Create floating motion
-            const offset = i * 0.1; // Stagger the animation
-            const x = origX + Math.sin(time * floatSpeed + offset) * 0.01;
-            const y = origY + Math.cos(time * floatSpeed * 0.7 + offset) * 0.02;
-            const z = origZ + Math.sin(time * floatSpeed * 0.3 + offset) * 0.01;
-            
-            dynamicPositions[i] = [x, y, z];
+            // Also update the store for consistency
+            // uniforms.update(u => {
+            //     const newUniforms = { ...u };
+            //     newUniforms.pos = { value: [e.uv.x, 1.0 - e.uv.y] };
+            //     console.log('Updated pos to:', newUniforms.pos.value);
+            //     return newUniforms;
+            // });
+        }
+    };
 
-            // Updated scale animation with configurable min/max and cycle duration
-            const scaleTime = (time * 1.5 + scaleOffsets[i]) % scaleCycleDuration;
-            const normalizedTime = scaleTime / scaleCycleDuration;
-            
-            // Create a sine wave that goes from 0 to 1 and back to 0
-            const sineValue = Math.sin(normalizedTime * Math.PI);
-            
-            // Map the sine value to the desired range
-            dynamicScales[i] = scaleMin + (scaleMax - scaleMin) * sineValue;
+    const handlePointerEnter = (e) => {
+        console.log('Portal entered');
+        if (portalMeshRef?.material?.uniforms) {
+            // Direct uniform update
+            portalMeshRef.material.uniforms.uEmissionStrength.value = 6;
+            portalMeshRef.material.uniforms.uEmissionStrength.needsUpdate = true;
         }
         
-        // Animate emissive intensity
-        dynamicEmissive = 10 + Math.sin(time * emissiveSpeed) * 5;
+        // // Also update store
+        // uniforms.update(u => {
+        //     const newUniforms = { ...u };
+        //     newUniforms.uEmissionStrength = { value: 6 };
+        //     return newUniforms;
+        // });
+    };
+
+    const handlePointerLeave = (e) => {
+        console.log('Portal left');
+        if (portalMeshRef?.material?.uniforms) {
+            // Direct uniform update
+            portalMeshRef.material.uniforms.pos.value[0] = 0.5;
+            portalMeshRef.material.uniforms.pos.value[1] = 0.5;
+            portalMeshRef.material.uniforms.pos.needsUpdate = true;
+            portalMeshRef.material.uniforms.uEmissionStrength.value = 4;
+            portalMeshRef.material.uniforms.uEmissionStrength.needsUpdate = true;
+        }
         
-        // Force reactivity update
-        instances = [...dynamicPositions];
+        // Also update store
+        // uniforms.update(u => {
+        //     const newUniforms = { ...u };
+        //     newUniforms.pos = { value: [0.5, 0.5] };
+        //     newUniforms.uEmissionStrength = { value: 4 };
+        //     return newUniforms;
+        // });
+    };
+
+    useTask((delta) => {
+        uniforms.update(u => ({
+            ...u,
+            uTime: { value: u.uTime.value + delta }
+        }));
     });
-
-    // Initialize instances
-    instances = [...dynamicPositions];
-
-    
 </script>
 
-<T.Group 
-bind:ref 
-{...props} 
+<T.Group bind:ref dispose={false} {...props} 
 rotation={[ 0, -1.5708, 0 ]}  
 position={[ -0.3719, -0.8118, 0 ]} 
 scale={[ 2.5, 2.5, 2.5 ]} 
@@ -313,9 +297,44 @@ scale={[ 2.5, 2.5, 2.5 ]}
     {#await portalGltf}
         {@render fallback?.()}
     {:then portalGltf}
-      
+        <!-- <T.PointLight
+            distance={21}
+            decay={1.6}
+            color={[129, 56, 255].map(c => c / 255)}
+            power={3.5867}
+            position={[ -0.0094, 0.4529, -0.1206 ]}
+            intensity={0.0467}
+            
+        /> -->
+
+        <!-- <T.Mesh
+            geometry={portalGltf.nodes.right.geometry}
+        >
+            <T.MeshPhysicalMaterial
+                map={$floorTexture}
+                normalMap={$floorNormalTexture}
+                color="#000000"
+                roughness={1}
+                reflectivity={1}
+                metalness={0}
+            />
+        </T.Mesh>
+        
+        <T.Mesh
+            geometry={portalGltf.nodes.left.geometry}            
+        >
+            <T.MeshPhysicalMaterial
+                map={$floorTexture}
+                normalMap={$floorNormalTexture}
+                color="#000000"
+                roughness={1}
+                reflectivity={1}
+                metalness={0}
+            />
+        </T.Mesh> -->
         <T.Mesh
             geometry={portalGltf.nodes.main.geometry}
+                
         >
             <T.MeshPhysicalMaterial
                 map={$floorTexture}
@@ -326,8 +345,26 @@ scale={[ 2.5, 2.5, 2.5 ]}
             />
         </T.Mesh> 
         
-   
+        <!-- <T.Mesh
+            bind:ref={portalMeshRef}
+            geometry={portalGltf.nodes.middle.geometry}
+            onpointerenter={handlePointerEnter}
+            onpointerleave={handlePointerLeave}
+            onpointermove={handlePointerMove}
+        
+        >
+           
+            <T.ShaderMaterial
+                {vertexShader}
+                {fragmentShader}
+                uniforms={$uniforms}
+                transparent={true}
+                side={2}
+                depthWrite={false}
+            />
+        </T.Mesh> -->
         <T.Mesh
+            bind:ref={portalMeshRef}
             geometry={portalGltf.nodes.portal.geometry}
             position={[ -0.0281, 0, 0 ]}
             scale={[ 1, 1, 1 ]}
@@ -340,25 +377,6 @@ scale={[ 2.5, 2.5, 2.5 ]}
                 transparent={true}
             />
         </T.Mesh>
-
-
-        <InstancedMesh {limit} range={limit}>
-            <T.SphereGeometry 
-            args={[0.008,30,30]}
-            />
-            <T.MeshStandardMaterial
-            color="#fff"
-            emissive="gold"
-            emissiveIntensity={dynamicEmissive}
-            />
-            {#each instances as instance, i}
-                <Instance 
-                    scale={dynamicScales[i]} 
-                    position={instance}
-                />
-            {/each}
-        </InstancedMesh>
-
     {:catch err}
         {@render error?.({ error: err })}
     {/await}

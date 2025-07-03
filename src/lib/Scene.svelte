@@ -28,6 +28,8 @@
         SMAAPreset,
         BloomEffect,
         KernelSize,
+        GodRaysEffect,
+
     } from 'postprocessing'
 
     const {     
@@ -39,6 +41,8 @@
         autoRender,
         invalidate
     } = useThrelte()
+
+    let godRaysLight = $state(null)
 
     const composer = new EffectComposer(renderer)
     const setupEffectComposer = (camera) => {
@@ -64,6 +68,25 @@
                 })
             )
         )
+        // composer.addPass(
+        //     new EffectPass(
+        //         camera,
+        //         new SMAAEffect({
+        //         preset: SMAAPreset.LOW
+        //         }),
+        //         new GodRaysEffect(camera,godRaysLight, {
+        //             height: 480,
+        //             kernelSize: KernelSize.SMALL,
+        //             density: 0.96,
+        //             decay: 0.92,
+        //             weight: 0.3,
+        //             exposure: 0.54,
+        //             samples: 60,
+        //             blur:0,
+        //             clampMax: 1.0
+        //         })
+        //     )
+        // )
     }
 
 
@@ -73,8 +96,6 @@
     $effect(() => {
         composer.setSize($size.width, $size.height)
     })
-
-
 
 
     onMount(() => {
@@ -96,11 +117,23 @@
 
 <CustomSky/>
 
+<!-- <T.Mesh 
+bind:ref={godRaysLight}
+scale={[0.05,0.05,0.05]} 
+position={[ -0.4192, 0.5609, -1.02 ]}>
+    <T.SphereGeometry args={[1,20,20]}/>
+    <T.MeshBasicMaterial
+        color={"0xffddaa"}
+        transparent={true}
+        fog= {false}
+    />
+</T.Mesh> -->
 
 <T.DirectionalLight position={[ -0.5269, 0.7927, -2.3517 ]} color="#fff4eb" intensity={0.1} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
 
+
 <!-- portal -->
-<Portal/>
+<Portal />
 
 <!-- ground -->
 <Water/>
