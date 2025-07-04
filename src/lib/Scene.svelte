@@ -5,6 +5,7 @@
     import { useLoader } from '@threlte/core'
     import Water from '$lib/mesh/Water.svelte'
     import CustomSky from '$lib/mesh/CustomSky.svelte'
+    import DuskSky from '$lib/mesh/DuskSky.svelte'
     import Crystal from '$lib/mesh/Crystal.svelte'
     import Portal from '$lib/mesh/Portal.svelte'
     import Rock1 from '$lib/model/rock1.svelte'
@@ -116,6 +117,7 @@
 </script>
 
 <CustomSky/>
+<!-- <DuskSky/> -->
 
 <!-- <T.Mesh 
 bind:ref={godRaysLight}
@@ -129,7 +131,7 @@ position={[ -0.4192, 0.5609, -1.02 ]}>
     />
 </T.Mesh> -->
 
-<T.DirectionalLight position={[ -0.5269, 0.7927, -2.3517 ]} color="#fff4eb" intensity={0.1} target.position={[ -1.5, -1.6, 0 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
+<T.DirectionalLight position={[ -1.8624, 1.0892, 2.7211 ]} color="#ffffff" intensity={1.23} target.position={[ 1.5, -2.6, -0.8 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
 
 
 <!-- portal -->
@@ -139,7 +141,7 @@ position={[ -0.4192, 0.5609, -1.02 ]}>
 <Water/>
 
 <!-- rocks -->
-<Rock1/>
+<!-- <Rock1/> -->
 
 <!-- camera -->
 <T.PerspectiveCamera

@@ -13,14 +13,54 @@
     const dracoLoader = useDraco();
     const portalGltf = useGltf("/model/newportal.glb", { dracoLoader });
 
+    
+    // snow-2k
+    // const floorTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/snow-2k/Snow011_2K-PNG/Snow011_2K-PNG_Color.png",
+    // );
+    // const floorNormalTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/snow-2k/Snow011_2K-PNG/Snow011_2K-PNG_NormalGL.png",
+    // );
+    // const floorRoughnessTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/snow-2k/Snow011_2K-PNG/Snow011_2K-PNG_Roughness.png",
+    // );
+
+
     const floorTexture = useLoader(TextureLoader).load(
-        "/textures/floor/seaside_rock_diff_4k.jpg",
+        "/textures/floor/rock-2k/Rock035_2K-PNG/Rock035_2K-PNG_Color.png",
     );
     const floorNormalTexture = useLoader(TextureLoader).load(
-        "/textures/floor/seaside_rock_nor_gl_4k.jpg",
+        "/textures/floor/rock-2k/Rock035_2K-PNG/Rock035_2K-PNG_NormalDX.png",
     );
+    const floorRoughnessTexture = useLoader(TextureLoader).load(
+        "/textures/floor/rock-2k/Rock035_2K-PNG/Rock035_2K-PNG_Roughness.png",
+    );
+    
+    // default
+    // const floorTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/seaside_rock_diff_4k.jpg",
+    // );
+    // const floorNormalTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/seaside_rock_nor_gl_4k.jpg",
+    // );
 
+    floorTexture.then((text)=>{
+        $floorTexture.wrapS = THREE.RepeatWrapping;
+        $floorTexture.wrapT = THREE.RepeatWrapping;
+        $floorTexture.repeat.set(2.5, 2.5);
+    })
+    floorNormalTexture.then((text)=>{
+        $floorNormalTexture.wrapT = THREE.RepeatWrapping;
+        $floorNormalTexture.wrapS = THREE.RepeatWrapping;
+        $floorNormalTexture.repeat.set(2.5, 2.5);
+    })
+    floorRoughnessTexture.then((text)=>{
+        $floorRoughnessTexture.wrapT = THREE.RepeatWrapping;
+        $floorRoughnessTexture.wrapS = THREE.RepeatWrapping;
+        $floorRoughnessTexture.repeat.set(2.5, 2.5);
+    })
 
+  
     portalGltf.then((portalGltf) => {
         console.log("portalGltf", portalGltf.nodes);
     });
@@ -381,13 +421,13 @@ scale={[ 2.5, 2.5, 2.5 ]}
     
         <T.Mesh
             geometry={portalGltf.nodes.main.geometry}
+            position={[ 0, 0, 0 ]}
         >
-            <T.MeshPhysicalMaterial
+            <T.MeshStandardMaterial
                 map={$floorTexture}
                 normalMap={$floorNormalTexture}
-                color="#955b2a"
-                roughness={0.7391}
-                ior={0.3043}
+                roughnessMap={$floorRoughnessTexture}
+                roughness={1}
             />
         </T.Mesh> 
 
@@ -399,7 +439,6 @@ scale={[ 2.5, 2.5, 2.5 ]}
             position={[ -0.0281, 0, 0 ]}
             scale={[ 1, 1, 1 ]}
         >
-           
             <T.ShaderMaterial
                 {vertexShader}
                 {fragmentShader}

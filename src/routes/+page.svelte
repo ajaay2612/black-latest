@@ -34,12 +34,12 @@
     <Canvas>   
         <Studio>
             <!-- <Sky 
-                turbidity={20}
-                rayleigh={4}
-                azimuth={180.00}
-                elevation={-5} 
-                mieCoefficient={0.1}
-                mieDirectionalG={0.59}
+                turbidity={17.1}
+                rayleigh={0.077}
+                azimuth={80.00}
+                elevation={5.1} 
+                mieCoefficient={0.0}
+                mieDirectionalG={0.155}
             /> -->
             <Scene />
         </Studio>
