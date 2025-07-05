@@ -15,7 +15,7 @@
         transparent={true}
         blending={2}
         emissive="#ffffff"
-        emissiveIntensity={0.1}
+        emissiveIntensity={1}
     />
 </T.Mesh>
 

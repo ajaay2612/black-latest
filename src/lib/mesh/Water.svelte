@@ -9,24 +9,24 @@
     import { useGltf, useDraco } from "@threlte/extras";
 
     // iska file size optimise
-    const floorTexture = useLoader(TextureLoader).load(
-        "/textures/floor/seaside_rock_diff_4k.jpg",
-    );
-    const floorNormalTexture = useLoader(TextureLoader).load(
-        "/textures/floor/seaside_rock_nor_gl_4k.jpg",
-    );
+    // const floorTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/seaside_rock_diff_4k.jpg",
+    // );
+    // const floorNormalTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/seaside_rock_nor_gl_4k.jpg",
+    // );
 
-    const dracoLoader = useDraco();
-    const groundGltf = useGltf("/model/ground.glb", { dracoLoader });
+    // const dracoLoader = useDraco();
+    // const groundGltf = useGltf("/model/ground.glb", { dracoLoader });
 
     // groundGltf.then((groundGltf) => {
     //     console.log("gltf", groundGltf);
     // });
-    const terrainGltf = useGltf("/model/terrain.glb", { dracoLoader });
+    // const terrainGltf = useGltf("/model/terrain.glb", { dracoLoader });
 
-    terrainGltf.then((terrainGltf) => {
-        console.log("terrainGltf", terrainGltf);
-    });
+    // terrainGltf.then((terrainGltf) => {
+    //     console.log("terrainGltf", terrainGltf);
+    // });
 
     let { fallback, error, children, ref = $bindable(), ...props } = $props();
 
@@ -41,8 +41,8 @@
     const params = {
         color: "#fff",
         scale: 5,
-        flowX: 0.5,
-        flowY: 0.2,
+        flowX: 0,
+        flowY: 0.5,
     };
 
     // Water parameters
@@ -50,9 +50,9 @@
         color: params.color,
         scale: params.scale,
         flowDirection: new THREE.Vector2(params.flowX, params.flowY),
-        textureWidth: 500,
-        textureHeight: 500,
-        reflectivity: 0.3,
+        textureWidth: 150,
+        textureHeight: 150,
+        reflectivity: 0.1,
     };
 
     useTask(() => {});
@@ -61,10 +61,13 @@
 <!-- isko optimise karna h, phone me this is shit -->
 <T.Water
     args={[new THREE.PlaneGeometry(3, 3), waterParams]}
-    position={[0.0226, -0.76, 0]}
+    position={[0.1, 0.05, 0.7]}
     rotation.x={deg2rad(-90)}
-    scale={[3.5, 3.3, 2.5]}
+    scale={[1.2,2.5,1.2]}
 />
+
+
+
 
 <!-- floor -->
 

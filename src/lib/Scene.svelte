@@ -8,6 +8,7 @@
     import DuskSky from '$lib/mesh/DuskSky.svelte'
     import Crystal from '$lib/mesh/Crystal.svelte'
     import Portal from '$lib/mesh/Portal.svelte'
+    import NewLandscape from '$lib/mesh/newLandscape.svelte'
     import Rock1 from '$lib/model/rock1.svelte'
     import {
         useGltf,
@@ -21,6 +22,8 @@
     import { Mesh } from "three";
     import * as THREE from 'three';
     import {  useThrelte } from '@threlte/core'
+    import { SMAAImageLoader } from 'postprocessing'
+
   	import {
         EffectComposer,
         EffectPass,
@@ -30,8 +33,16 @@
         BloomEffect,
         KernelSize,
         GodRaysEffect,
-
+        EdgeDetectionMode,
+        ToneMappingEffect,
+        ToneMappingMode 
     } from 'postprocessing'
+
+    // Load SMAA textures first
+    const smaaImageLoader = new SMAAImageLoader()
+    let smaaSearchTexture, smaaAreaTexture
+
+    
 
     const {     
         scene,
@@ -47,51 +58,64 @@
 
     const composer = new EffectComposer(renderer)
     const setupEffectComposer = (camera) => {
+
+        renderer.toneMappingExposure = 0.6;
+
         composer.removeAllPasses()
         composer.addPass(new RenderPass(scene, camera))
         composer.addPass(
             new EffectPass(
                 camera,
                 new BloomEffect({
-                    intensity: 1.2,
-                    radius: 0.75,
+                    intensity: 0.8,
+                    radius: 0.5,
                     luminanceThreshold: 0,
                     mipmapBlur: true,
                     kernelSize: KernelSize.MEDIUM
                 })
             )
         )
-        composer.addPass(
-            new EffectPass(
-                camera,
-                new SMAAEffect({
-                preset: SMAAPreset.LOW
-                })
-            )
+
+        // Proper SMAA antialiasing with loaded textures
+        const smaaEffect = new SMAAEffect(
+            smaaSearchTexture,
+            smaaAreaTexture,
+            SMAAPreset.HIGH,
+            EdgeDetectionMode.COLOR
         )
-        // composer.addPass(
-        //     new EffectPass(
-        //         camera,
-        //         new SMAAEffect({
-        //         preset: SMAAPreset.LOW
-        //         }),
-        //         new GodRaysEffect(camera,godRaysLight, {
-        //             height: 480,
-        //             kernelSize: KernelSize.SMALL,
-        //             density: 0.96,
-        //             decay: 0.92,
-        //             weight: 0.3,
-        //             exposure: 0.54,
-        //             samples: 60,
-        //             blur:0,
-        //             clampMax: 1.0
-        //         })
-        //     )
-        // )
+        
+        // Optional: Fine-tune SMAA settings
+        smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.001)
+        
+        composer.addPass(
+            new EffectPass(camera, smaaEffect)
+        )
+        // Tone mapping effect
+        const toneMappingEffect = new ToneMappingEffect({
+            mode: ToneMappingMode.REINHARD2_ADAPTIVE,
+            resolution: 256,
+            whitePoint: 5.0,
+            middleGrey: 2.6,
+            minLuminance: 0.1,
+            averageLuminance: 0.5,
+            adaptationRate: 1.5,
+        })
+        
+        // Add both effects in a single pass
+        composer.addPass(
+            new EffectPass(camera, smaaEffect, toneMappingEffect)
+        )
+
+  
     }
 
 
     $effect(() => {
+        smaaImageLoader.load(([search, area]) => {
+            smaaSearchTexture = search
+            smaaAreaTexture = area
+            // Now setup your composer
+        })
         setupEffectComposer($camera)
     })
     $effect(() => {
@@ -116,7 +140,7 @@
 
 </script>
 
-<CustomSky/>
+<!-- <CustomSky/> -->
 <!-- <DuskSky/> -->
 
 <!-- <T.Mesh 
@@ -131,11 +155,19 @@ position={[ -0.4192, 0.5609, -1.02 ]}>
     />
 </T.Mesh> -->
 
-<T.DirectionalLight position={[ -1.8624, 1.0892, 2.7211 ]} color="#ffffff" intensity={1.23} target.position={[ 1.5, -2.6, -0.8 ]} visible scale={[ 0.5, 0.5, 0.5 ]} rotation={[ 0, 0, 0 ]}/>
 
+<!-- <T.AmbientLight
+intensity={0.5}
+color={"white"}
+></T.AmbientLight> -->
 
 <!-- portal -->
-<Portal />
+<!-- <Portal /> -->
+
+<NewLandscape 
+scale={0.15}
+
+/>
 
 <!-- ground -->
 <Water/>
@@ -146,10 +178,10 @@ position={[ -0.4192, 0.5609, -1.02 ]}>
 <!-- camera -->
 <T.PerspectiveCamera
     makeDefault
-    position={[ 0.3559, -0.6004, 2.7949 ]}
+    position={[ 0, 0.34, 3.4 ]}
     fov={44.75}
     scale={[ 1, 1, 1 ]}
-    rotation={[ 0.1641, 0.2601, -0.0227 ]}
+    rotation={[ 0, 0, 0 ]}
 >
 
     <!-- {#snippet children({ref})}

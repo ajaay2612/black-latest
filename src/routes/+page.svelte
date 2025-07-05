@@ -1,5 +1,5 @@
 <script>
-    import { Canvas } from '@threlte/core'
+    import { Canvas, T } from '@threlte/core'
     import Scene from '../lib/Scene.svelte'
     import { Sky } from '@threlte/extras';
     import { Studio } from '@threlte/studio'
@@ -36,11 +36,23 @@
             <!-- <Sky 
                 turbidity={17.1}
                 rayleigh={0.077}
-                azimuth={80.00}
-                elevation={5.1} 
+                azimuth={-180.00}
+                elevation={13} 
                 mieCoefficient={0.0}
                 mieDirectionalG={0.155}
             /> -->
+            <Environment 
+                isBackground
+                url={"/hdr/overcast_soil_puresky_2k.hdr"} 
+            />
+
+            <!-- <T.Mesh>
+                <T.MeshPhysicalMaterial
+                    color="#fff"
+                />
+                <T.SphereGeometry/>
+            </T.Mesh> -->
+
             <Scene />
         </Studio>
     </Canvas>

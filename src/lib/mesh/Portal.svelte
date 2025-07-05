@@ -11,30 +11,30 @@
 
     let {  fallback, error, children, ref = $bindable(), ...props } = $props();
     const dracoLoader = useDraco();
-    const portalGltf = useGltf("/model/newportal.glb", { dracoLoader });
+    const portalGltf = useGltf("/model/newLandscape.glb", { dracoLoader });
 
     
     // snow-2k
-    // const floorTexture = useLoader(TextureLoader).load(
-    //     "/textures/floor/snow-2k/Snow011_2K-PNG/Snow011_2K-PNG_Color.png",
-    // );
-    // const floorNormalTexture = useLoader(TextureLoader).load(
-    //     "/textures/floor/snow-2k/Snow011_2K-PNG/Snow011_2K-PNG_NormalGL.png",
-    // );
-    // const floorRoughnessTexture = useLoader(TextureLoader).load(
-    //     "/textures/floor/snow-2k/Snow011_2K-PNG/Snow011_2K-PNG_Roughness.png",
-    // );
-
-
     const floorTexture = useLoader(TextureLoader).load(
-        "/textures/floor/rock-2k/Rock035_2K-PNG/Rock035_2K-PNG_Color.png",
+        "/textures/floor/snow-2k/Snow011_2K-PNG/Snow011_2K-PNG_Color.png",
     );
     const floorNormalTexture = useLoader(TextureLoader).load(
-        "/textures/floor/rock-2k/Rock035_2K-PNG/Rock035_2K-PNG_NormalDX.png",
+        "/textures/floor/snow-2k/Snow011_2K-PNG/Snow011_2K-PNG_NormalGL.png",
     );
     const floorRoughnessTexture = useLoader(TextureLoader).load(
-        "/textures/floor/rock-2k/Rock035_2K-PNG/Rock035_2K-PNG_Roughness.png",
+        "/textures/floor/snow-2k/Snow011_2K-PNG/Snow011_2K-PNG_Roughness.png",
     );
+
+    // new rock
+    // const floorTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/rock-2k/Rock035_2K-PNG/Rock035_2K-PNG_Color.png",
+    // );
+    // const floorNormalTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/rock-2k/Rock035_2K-PNG/Rock035_2K-PNG_NormalDX.png",
+    // );
+    // const floorRoughnessTexture = useLoader(TextureLoader).load(
+    //     "/textures/floor/rock-2k/Rock035_2K-PNG/Rock035_2K-PNG_Roughness.png",
+    // );
     
     // default
     // const floorTexture = useLoader(TextureLoader).load(
