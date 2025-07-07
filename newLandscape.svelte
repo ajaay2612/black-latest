@@ -21,34 +21,36 @@ Command: npx @threlte/gltf@3.0.1 static/model/newLandscape.glb
     {@render fallback?.()}
   {:then gltf}
     <T.Mesh
-      geometry={gltf.nodes.Circle005.geometry}
+      geometry={gltf.nodes.Circle014.geometry}
       material={gltf.materials.plainWhite}
+      position={[-0.14, 0.67, 0.08]}
     />
     <T.Mesh
-      geometry={gltf.nodes.Plane002.geometry}
+      geometry={gltf.nodes.Circle015.geometry}
       material={gltf.materials.white}
+      position={[0.01, 7.47, 0.08]}
     />
     <T.Mesh
-      geometry={gltf.nodes.Cylinder002.geometry}
-      material={gltf.materials.plainWhite}
-      position={[0.07, 0.67, 0]}
-      rotation={[-Math.PI, 1.46, -Math.PI]}
-    />
-    <T.Mesh
-      geometry={gltf.nodes.Circle008.geometry}
+      geometry={gltf.nodes.Circle016.geometry}
       material={gltf.materials.white}
-      position={[0.07, 7.61, 0]}
+      position={[0.01, 0.29, 0.08]}
     />
     <T.Mesh
-      geometry={gltf.nodes.Circle009.geometry}
+      geometry={gltf.nodes.Circle017.geometry}
       material={gltf.materials.white}
-      position={[0.07, 0.29, 0]}
+      position={[0.01, 6.67, 0.08]}
     />
     <T.Mesh
-      geometry={gltf.nodes.Circle001.geometry}
+      geometry={gltf.nodes.Plane006.geometry}
       material={gltf.materials.white}
-      position={[0.08, 6.89, 0]}
-      scale={5.62}
+      position={[-0.14, 0.67, 4.66]}
+      scale={24.25}
+    />
+    <T.Mesh
+      geometry={gltf.nodes.Plane007.geometry}
+      material={gltf.materials.white}
+      position={[-0.14, -2.26, 4.66]}
+      scale={24.25}
     />
   {:catch err}
     {@render error?.({ error: err })}

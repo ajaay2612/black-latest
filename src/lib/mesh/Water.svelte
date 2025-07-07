@@ -40,9 +40,9 @@
 
     const params = {
         color: "#fff",
-        scale: 5,
+        scale: 1,
         flowX: 0,
-        flowY: 0.5,
+        flowY: 0.2,
     };
 
     // Water parameters
@@ -50,9 +50,9 @@
         color: params.color,
         scale: params.scale,
         flowDirection: new THREE.Vector2(params.flowX, params.flowY),
-        textureWidth: 150,
-        textureHeight: 150,
-        reflectivity: 0.1,
+        textureWidth: 100,
+        textureHeight: 100,
+        reflectivity: 0.7,
     };
 
     useTask(() => {});
@@ -61,9 +61,10 @@
 <!-- isko optimise karna h, phone me this is shit -->
 <T.Water
     args={[new THREE.PlaneGeometry(3, 3), waterParams]}
-    position={[0.1, 0.05, 0.7]}
+    position={[ -0.4, 0.05, 2.4 ]}
     rotation.x={deg2rad(-90)}
     scale={[1.2,2.5,1.2]}
+    material.transparent={false}
 />
 
 

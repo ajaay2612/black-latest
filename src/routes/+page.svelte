@@ -6,7 +6,7 @@
     import { Environment  } from '@threlte/extras'
     import { onMount } from 'svelte';
     import Stats from 'stats.js';
-    
+    import * as THREE from 'three'
     onMount(()=>{
         var stats = new Stats();
         stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
@@ -31,8 +31,20 @@
 
 
 <div class="h-screen fixed left-0 top-0 w-full bg-[#000000]">
-    <Canvas>   
+    <Canvas
+        createRenderer={(canvas) => {
+            return new THREE.WebGLRenderer({
+                canvas,
+                alpha: true,
+                powerPreference: 'high-performance',
+                antialias: true,
+                depth: false,
+                premultipliedAlpha: false,
+            })
+        }}
+    >   
         <Studio>
+            <T.AmbientLight intensity={8}/>
             <!-- <Sky 
                 turbidity={17.1}
                 rayleigh={0.077}
@@ -41,10 +53,10 @@
                 mieCoefficient={0.0}
                 mieDirectionalG={0.155}
             /> -->
-            <Environment 
-                isBackground
+            <!-- <Environment 
+                isBackground={!false}
                 url={"/hdr/overcast_soil_puresky_2k.hdr"} 
-            />
+            /> -->
 
             <!-- <T.Mesh>
                 <T.MeshPhysicalMaterial

@@ -59,8 +59,6 @@
     const composer = new EffectComposer(renderer)
     const setupEffectComposer = (camera) => {
 
-        renderer.toneMappingExposure = 0.6;
-
         composer.removeAllPasses()
         composer.addPass(new RenderPass(scene, camera))
         composer.addPass(
