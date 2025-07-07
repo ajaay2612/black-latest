@@ -65,7 +65,7 @@
             new EffectPass(
                 camera,
                 new BloomEffect({
-                    intensity: 0.8,
+                    intensity: 1.8,
                     radius: 0.5,
                     luminanceThreshold: 0,
                     mipmapBlur: true,

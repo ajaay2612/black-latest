@@ -44,7 +44,7 @@
         }}
     >   
         <Studio>
-            <T.AmbientLight intensity={8}/>
+            <T.AmbientLight intensity={12}/>
             <!-- <Sky 
                 turbidity={17.1}
                 rayleigh={0.077}
